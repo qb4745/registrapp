@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>RegistrAPP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <ion-card>
+    <ion-card-content>
+      <form (ngSubmit)="createAccount()" [formGroup]="credentials">
+        <ion-item>
+          <ion-label position="stacked">Correo electrónico</ion-label>
+          <ion-input
+            type="email"
+            inputmode="email"
+            placeholder="Ingresa tu correo electrónico"
+            formControlName="email"
+          ></ion-input>
+          <ion-note
+            slot="error"
+            *ngIf="(email.dirty || email.touched) && email.errors"
+            >Ingresa un correo electrónico válido</ion-note
+          >
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input
+            type="password"
+            placeholder="Ingresa tu contraseña"
+            formControlName="password"
+          ></ion-input>
+          <ion-note
+            slot="error"
+            *ngIf="(password.dirty || password.touched) && password.errors?.['required']"
+            >Ingresa tu contraseña</ion-note
+          >
+          <ion-note
+            slot="error"
+            *ngIf="(password.dirty || password.touched) && password.errors?.['minlength']"
+            >Largo minimo de 6 caracteres</ion-note
+          >
+        </ion-item>
+        <ion-button
+          type="submit"
+          expand="block"
+          strong="true"
+          [disabled]="!credentials.valid"
+          >Crear Cuenta</ion-button
+        >
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

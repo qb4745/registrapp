@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>RegistrAPP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <ion-card>
+    <ion-card-content>
+      <form (ngSubmit)="login()" [formGroup]="credentials">
+        <ion-item>
+          <ion-label position="stacked">Correo electrónico</ion-label>
+          <ion-input
+            type="email"
+            inputmode="email"
+            placeholder="Ingresa tu correo electrónico"
+            formControlName="email"
+          ></ion-input>
+          <ion-note
+            slot="error"
+            *ngIf="(email.dirty || email.touched) && email.errors"
+            >Ingresa tu correo electrónico</ion-note
+          >
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input
+            type="password"
+            placeholder="Ingresa tu contraseña"
+            formControlName="password"
+          ></ion-input>
+          <ion-note
+            slot="error"
+            *ngIf="(password.dirty || password.touched) && password.errors"
+            >Ingresa tu contraseña</ion-note
+          >
+        </ion-item>
+        <ion-button
+          type="submit"
+          expand="block"
+          strong="true"
+          [disabled]="!credentials.valid"
+          >Ingresar</ion-button
+        >
+
+        <div class="ion-margin-top">
+          <ion-button
+            type="button"
+            expand="block"
+            color="primary"
+            fill="outline"
+            (click)="goToRegister()"
+          >
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            Registrarse
+          </ion-button>
+
+          <ion-button
+            type="button"
+            expand="block"
+            color="secondary"
+            (click)="forgotPw()"
+          >
+            <ion-icon name="key-outline" slot="start"></ion-icon>
+            ¿Olvidaste tu contraseña?
+          </ion-button>
+
+          <ion-button
+            type="button"
+            expand="block"
+            color="tertiary"
+            (click)="getMagicLink()"
+          >
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            Ingresa con Email
+          </ion-button>
+          <!--           <ion-button
+            type="button"
+            expand="block"
+            color="warning"
+            routerLink="student"
+          >
+            <ion-icon name="arrow-forward" slot="start"></ion-icon>
+            Ingresar Sin Cuenta
+          </ion-button> -->
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
