@@ -27,7 +27,9 @@ export class LoginPage implements OnInit {
   ) {
     this.authService.getCurrentUser().subscribe((user) => {
       if (user) {
-        console.log('USUARIO OBTENIDO AL INICIAR SESIÓN');
+        const userId = this.authService.getCurrentUserId();
+        console.log('USER ID:', userId);
+        console.log('USUARIO OBTENIDO AL INICIAR SESIÓN', user);
         /* this.router.navigateByUrl('/pages/student-tabs/tabs', { replaceUrl: true }); */
         this.goToStudentTabs();
       }

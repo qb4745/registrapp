@@ -69,11 +69,12 @@ export class AuthService {
   }
 
   sendPwReset(email) {
-    return this.supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/forgot-password` });
+    return this.supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/password-recovery` });
   }
 
   updatePassword(password) {
-    return this.supabase.auth.updateUser({ password });
+    const newPassword = password.password;
+    return this.supabase.auth.updateUser({ password: newPassword });
   }
 
   async signOut() {

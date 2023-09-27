@@ -13,4 +13,8 @@ export const routes: Routes = [
     path: 'student',
     loadChildren: () => import('./pages/student-tabs/tabs/tabs.routes').then((m) => m.routes),
   },
+  {
+    path: 'password-recovery',
+    loadComponent: () => import('./pages/password-recovery/password-recovery.page').then( m => m.PasswordRecoveryPage)
+  },
 ];
