@@ -3,16 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { NavigationExtras, Router } from '@angular/router';
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { HttpClientModule } from '@angular/common/http';
+import { UserModel } from 'src/app/models/UserModel';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule]
 })
 export class LoginPage implements OnInit {
+  private supabase: SupabaseClient;
+  private userFromPublic: UserModel;
+
   credentials = this.fb.group({
     email: ['', Validators.required],
     password: ['', Validators.required],
@@ -23,15 +30,22 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private loadingController: LoadingController,
     private alertController: AlertController,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
-    this.authService.getCurrentUser().subscribe((user) => {
+    this.authService.getCurrentUser().subscribe(async (user) => {
       if (user) {
         const userId = this.authService.getCurrentUserId();
         console.log('USER ID:', userId);
+        this.getUserFromPublicTable(userId);
+
+        this.redirectBasedOnRolValue(this.userFromPublic);
+
+
+
         console.log('USUARIO OBTENIDO AL INICIAR SESIÓN', user);
         /* this.router.navigateByUrl('/pages/student-tabs/tabs', { replaceUrl: true }); */
-        this.goToStudentTabs();
+        /* this.goToStudentTabs(); */
       }
     });
   }
@@ -142,8 +156,57 @@ export class LoginPage implements OnInit {
     this.router.navigate(['student/tabs/tab1']);
   }
 
+  goToTeacherTabs() {
+    this.router.navigate(['teacher/tabs/tab1']);
+  }
+
   goToRegister() {
     this.router.navigate(['register']);
+  }
+
+/*   redirectBasedOnRolValue(userId: string) {
+    this.userService.getUserRolObservable(userId).subscribe({
+      next: rol => {
+        console.log('ROL:', rol); // 1: student, 2: teacher
+        if (rol === 1) {
+          this.goToStudentTabs();
+        } else if (rol === 2) {
+          this.goToTeacherTabs();
+        }
+      },
+      error: error => {
+        console.error('Error fetching user rol:', error);
+      }
+    });
+  } */
+  redirectBasedOnRolValue(userModel: UserModel) {
+    const id = this.userFromPublic.id;
+    let userInfoSend: NavigationExtras = {
+      state: {
+        user: this.userFromPublic
+
+      }
+    }
+    if (userModel.rol === 1) {
+      console.log('en redirect:');
+      this.router.navigate([`/student/tabs/tab1/${id}`], userInfoSend);
+    } else if (userModel.rol === 2) {
+      this.router.navigate([`/teacher/tabs/tab1/${id}`], userInfoSend);
+    }
+  }
+
+  getUserFromPublicTable(userId: string) {
+    this.userService.getUserDetailsObservable(userId).subscribe({
+      next: user => {
+        console.log('User Details:', user);
+        this.userFromPublic = user[0];
+        console.log('User From Public:', this.userFromPublic);
+        // Access all fields of the user object like user.rol, user.email, user.id, etc.
+      },
+      error: error => {
+        console.error('Error fetching user details:', error);
+      }
+    });
   }
 
   ngOnInit(): void {
