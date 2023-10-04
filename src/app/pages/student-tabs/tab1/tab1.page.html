@@ -9,15 +9,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-card class="ion-no-margin profile-card">
+<ion-content [fullscreen]="true" *ngIf="userFromPublic">
+  <ion-card class="profile-card">
     <ion-card-content>
       <ion-avatar>
         <img src="../../../../assets/card-media.png" />
       </ion-avatar>
 
       <h1>
-        <ion-text color="tertiary"
+        <ion-text class="ion-text-center" color="tertiary"
           ><strong
             >{{ userFromPublic.nombre | titlecase }} {{ userFromPublic.apaterno
             | titlecase }}</strong

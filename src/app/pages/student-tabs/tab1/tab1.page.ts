@@ -27,11 +27,14 @@ export class Tab1Page implements OnInit{
 
 
   ) {
+
     this.authService.getCurrentUser().subscribe(async (user) => {
       if (user) {
         const userId = this.authService.getCurrentUserId();
         console.log('studiante constructor :', userId);
         this.getUserFromPublicTable(userId);
+        console.log('studiante constructor2 :', this.userFromPublic);
+
 
 
       }
@@ -41,8 +44,8 @@ export class Tab1Page implements OnInit{
   getUserFromPublicTable(userId: string) {
     this.userService.getUserDetailsObservable(userId).subscribe({
       next: user => {
-      /*   console.log('User Details:', user); */
         this.userFromPublic = user[0];
+        console.log('User Details getUserFromPublicTable:', this.userFromPublic);
     /*     console.log('User From Public:', this.userFromPublic); */
         // Access all fields of the user object like user.rol, user.email, user.id, etc.
       },
