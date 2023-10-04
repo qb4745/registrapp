@@ -73,7 +73,7 @@ export class Tab1Page implements OnInit{
   }
 
   gotoCredencialVirtual() {
-    this.router.navigate(['credencial/credencial-virtual']);
+    this.router.navigate(['credencial']);
   }
 
   signOut() {

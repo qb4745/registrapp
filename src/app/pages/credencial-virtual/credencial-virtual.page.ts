@@ -43,13 +43,11 @@ export class CredencialVirtualPage implements OnInit {
     this.authService.getCurrentUser().subscribe(async (user) => {
       if (user) {
         const userId = this.authService.getCurrentUserId();
-        console.log('USER ID:', userId);
+        console.log('studiante constructor :', userId);
         this.getUserFromPublicTable(userId);
-        this.redirectBasedOnRolValue(this.userFromPublic);
-        if (this.userFromPublic !== undefined) {
-          console.log('USER FROM PUBLIC2:', this.userFromPublic);
-          this.redirectBasedOnRolValue(this.userFromPublic);
-        }
+        console.log('studiante constructor2 :', this.userFromPublic);
+
+
 
       }
     });
@@ -94,24 +92,24 @@ export class CredencialVirtualPage implements OnInit {
     async updateProfilePicture() {
 
       const actionSheet = await this.actionSheetController.create({
-        header: 'Choose existing picture or take new',
+        header: 'Elejir fotografía existente o tomar una nueva',
         cssClass: 'custom-action-sheet',
         buttons: [
           {
-            text: 'Choose from gallery',
+            text: 'Elejir fotografía desde galeria',
             icon: 'images',
             handler: () => {
-              // Put in logic ...
+              // falta logica ...
             }
           },
           {
-            text: 'Take picture',
+            text: 'Tomar fotografía',
             icon: 'camera',
             handler: () => {
-              // Put in logic ...
+              // falta logica ...
             }
           }, {
-            text: 'Cancel',
+            text: 'Cancelar',
             icon: 'close',
             role: 'cancel'
           }]

@@ -9,17 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <form [formGroup]="editProfileForm" (ngSubmit)="submit()">
-        <ion-button color="secondary" type="submit"> Done </ion-button>
-      </form>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" *ngIf="userFromPublic">
   <ion-card class="ion-no-margin profile-card">
     <ion-card-content>
       <ion-avatar>
@@ -27,19 +17,28 @@
       </ion-avatar>
 
       <h1>
-        <ion-text color="tertiary"><strong>John Doe</strong></ion-text>
+        <ion-text color="tertiary"
+          ><strong>
+            {{ userFromPublic.nombre | titlecase }} {{ userFromPublic.apaterno |
+            titlecase }}</strong
+          ></ion-text
+        >
       </h1>
 
       <p>
-        <ion-text color="medium">john.doe@mail.com</ion-text>
+        <ion-text color="medium">{{ userFromPublic.email }}</ion-text>
       </p>
+
+      <h2>
+        <ion-text color="medium"><strong> Carrera: </strong></ion-text>
+      </h2>
 
       <ion-button
         class="ion-button-small"
         color="primary"
         (click)="updateProfilePicture()"
       >
-        Update profile picture
+        Cambiar fotografía de perfil
       </ion-button>
     </ion-card-content>
   </ion-card>
