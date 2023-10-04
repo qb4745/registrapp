@@ -29,4 +29,8 @@ export const routes: Routes = [
     path: 'teacher/:id',
     loadChildren: () => import('./pages/teacher-tabs/tabs/tabs.routes').then( m => m.routes)
   },
+  {
+    path: 'credencial',
+    loadComponent: () => import('./pages/credencial-virtual/credencial-virtual.page').then( m => m.CredencialVirtualPage)
+  },
 ];

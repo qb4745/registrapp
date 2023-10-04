@@ -1,11 +1,11 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-back-button color="secondary" text="Back" defaultHref="/home">
-      </ion-back-button>
+    <ion-title color="light"> Estudiantes </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="secondary" (click)="signOut()">
+        <ion-icon slot="icon-only" color="light" name="log-out"></ion-icon>
+      </ion-button>
     </ion-buttons>
-
-    <ion-title color="light"> Settings </ion-title>
   </ion-toolbar>
 </ion-header>
 
