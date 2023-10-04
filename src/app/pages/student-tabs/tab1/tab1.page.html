@@ -1,15 +1,32 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title> Estudiantes </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Login" defaultHref="/"
+        >Estudiantes</ion-back-button
+      >
+      <ion-label class="ion-text-center">Estudiantes</ion-label>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding" *ngIf="userFromPublic">
+  <ion-row>
+    <ion-col class="content-col">
+      <ion-text color="dark">
+        <h2 class="user-name ion-text-center">
+          Hola, {{userFromPublic.nombre}} {{userFromPublic.apaterno}}.
+        </h2>
+      </ion-text>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">Correo electrónico</ion-label>
+          <ion-input color="primary" readonly="true"
+            >{{userFromPublic.email}}</ion-input
+          >
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-button expand="block" color="warning">Horario de hoy</ion-button>
 </ion-content>

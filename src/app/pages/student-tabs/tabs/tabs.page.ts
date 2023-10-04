@@ -1,5 +1,6 @@
 import { Component, EnvironmentInjector, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { UserModel } from 'src/app/models/UserModel';
 
 @Component({
   selector: 'app-tabs',
@@ -10,6 +11,7 @@ import { IonicModule } from '@ionic/angular';
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
+
 
   constructor() {}
 }

@@ -38,12 +38,14 @@ export class LoginPage implements OnInit {
         const userId = this.authService.getCurrentUserId();
         console.log('USER ID:', userId);
         this.getUserFromPublicTable(userId);
+        if (this.userFromPublic !== undefined) {
+          console.log('USER FROM PUBLIC2:', this.userFromPublic);
+          this.redirectBasedOnRolValue(this.userFromPublic);
+        }
 
-        this.redirectBasedOnRolValue(this.userFromPublic);
 
-
-
-        console.log('USUARIO OBTENIDO AL INICIAR SESIÓN', user);
+/*         this.redirectBasedOnRolValue(this.userFromPublic); */
+/*         console.log('USUARIO OBTENIDO AL INICIAR SESIÓN', user); */
         /* this.router.navigateByUrl('/pages/student-tabs/tabs', { replaceUrl: true }); */
         /* this.goToStudentTabs(); */
       }
@@ -180,27 +182,20 @@ export class LoginPage implements OnInit {
     });
   } */
   redirectBasedOnRolValue(userModel: UserModel) {
-    const id = this.userFromPublic.id;
-    let userInfoSend: NavigationExtras = {
-      state: {
-        user: this.userFromPublic
-
-      }
-    }
     if (userModel.rol === 1) {
       console.log('en redirect:');
-      this.router.navigate([`/student/tabs/tab1/${id}`], userInfoSend);
+      this.goToStudentTabs();
     } else if (userModel.rol === 2) {
-      this.router.navigate([`/teacher/tabs/tab1/${id}`], userInfoSend);
+      this.goToTeacherTabs();
     }
   }
 
   getUserFromPublicTable(userId: string) {
     this.userService.getUserDetailsObservable(userId).subscribe({
       next: user => {
-        console.log('User Details:', user);
+      /*   console.log('User Details:', user); */
         this.userFromPublic = user[0];
-        console.log('User From Public:', this.userFromPublic);
+    /*     console.log('User From Public:', this.userFromPublic); */
         // Access all fields of the user object like user.rol, user.email, user.id, etc.
       },
       error: error => {

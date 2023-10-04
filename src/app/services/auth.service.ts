@@ -16,15 +16,15 @@ export class AuthService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
     this.supabase.auth.onAuthStateChange((event, sess) => {
-      console.log('SUPABAS AUTH CHANGED: ', event);
-      console.log('SUPABAS AUTH CHANGED sess: ', sess);
+/*       console.log('SUPABAS AUTH CHANGED: ', event);
+      console.log('SUPABAS AUTH CHANGED sess: ', sess); */
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        console.log('SET USER');
+     /*    console.log('SET USER'); */
 
         this.currentUser.next(sess.user);
       } else {
-        console.log('SET USER TO FALSE');
+/*         console.log('SET USER TO FALSE'); */
         this.currentUser.next(false);
       }
     });
@@ -34,20 +34,20 @@ export class AuthService {
 
   async loadUser() {
     if (this.currentUser.value) {
-      console.log('ALREADY GOT USER');
+     /*  console.log('ALREADY GOT USER'); */
       return;
     } else {
-      console.log('NO USER, GETTING USER');
+      /* console.log('NO USER, GETTING USER'); */
     }
 
     const user = await this.supabase.auth.getUser();
-    console.log('🚀 ~ file: auth.service.ts ~ line 33 ~ AuthService ~ loadUser ~ session', user);
+/*     console.log('🚀 ~ file: auth.service.ts ~ line 33 ~ AuthService ~ loadUser ~ session', user); */
 
     if (user.data.user) {
-      console.log('aaaaaaaaaa');
+     /*  console.log('aaaaaaaaaa'); */
       this.currentUser.next(user.data.user);
     } else {
-      console.log('bbbbbbbbbb');
+      /* console.log('bbbbbbbbbb'); */
       this.currentUser.next(false);
     }
 
