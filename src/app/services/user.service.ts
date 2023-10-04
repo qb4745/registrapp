@@ -25,62 +25,19 @@ export class UserService {
 
 
 
-/*     this.loadUser();
-    const userId = this.getCurrentUserId();
-    this.getUserDetailsObservable(userId); */
 
-
-  }
-
-/*   async loadUser() {
-    if (this.currentUser.value) {
-      return;
-    }
-
-    const user = await this.supabase.auth.getUser();
-
-    if (user.data.user) {
-      this.currentUser.next(user.data.user);
-    } else {
-      this.currentUser.next(false);
-    }
-
-  } */
-
-/*   getCurrentUser(): Observable<User | boolean> {
-    return this.currentUser.asObservable();
-  }
-
-  getCurrentUserId(): string {
-    if (this.currentUser.value) {
-      return (this.currentUser.value as User).id;
-    } else {
-      return null;
-    }
-  }
-
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'apikey': this.apiKey
-    });
-  }
-
-  private handleResponse(response: any): any {
-    return response[0]; // Modify this based on your API response structure
-  }
-
-  getUserDetailsFromPublicTable(userId: string): UserModel {
-    return this.userDetails;
   }
 
   getUserRolObservable(userId: string): Observable<number> {
     const url = `${this.apiUrl}?id=eq.${userId}&select=rol`;
-    const headers = this.getHeaders();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'apikey': this.apiKey
+    });
 
     return this.http.get<any[]>(url, { headers })
       .pipe(map(data => data[0].rol));
-  } */
+  }
 
   getUserDetailsObservable(userId: string): Observable<any> {
     const url = `${this.apiUrl}?id=eq.${userId}&select=*`;
@@ -92,6 +49,24 @@ export class UserService {
     });
 
     return this.http.get<any[]>(url, { headers: headers });
+  }
+
+  async getUserRol(userId: string): Promise<number> {
+    const url = `${this.apiUrl}?id=eq.${userId}&select=rol`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'apikey': this.apiKey
+    });
+
+    try {
+      const data = await this.http.get<any[]>(url, { headers }).toPromise();
+      const firstItem = data[0];
+      return firstItem ? firstItem.rol : null; // Return null if no data or undefined
+    } catch (error) {
+      // Handle errors here (e.g., log the error, show a user-friendly message)
+      console.error('Error fetching user rol:', error);
+      throw error; // Rethrow the error to the caller if needed
+    }
   }
 
 

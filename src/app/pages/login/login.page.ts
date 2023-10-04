@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
@@ -19,11 +19,14 @@ import { UserModel } from 'src/app/models/UserModel';
 export class LoginPage implements OnInit {
   private supabase: SupabaseClient;
   private userFromPublic: UserModel;
+  private userId: string;
 
   credentials = this.fb.group({
     email: ['', Validators.required],
     password: ['', Validators.required],
   });
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -33,23 +36,24 @@ export class LoginPage implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
+    console.log("constructor init carga");
     this.authService.getCurrentUser().subscribe(async (user) => {
       if (user) {
-        const userId = this.authService.getCurrentUserId();
-        console.log('USER ID:', userId);
-        this.getUserFromPublicTable(userId);
-        if (this.userFromPublic !== undefined) {
-          console.log('USER FROM PUBLIC2:', this.userFromPublic);
-          this.redirectBasedOnRolValue(this.userFromPublic);
-        }
 
+        console.log('USER FROM PUBLIC1:', this.userFromPublic);
+        this.userId = this.authService.getCurrentUserId();
+        console.log('USER ID:', this.userId);
+        const userRol = this.userService.getUserRol(this.userId);
+        this.redirectByRolValue(await userRol);
 
-/*         this.redirectBasedOnRolValue(this.userFromPublic); */
-/*         console.log('USUARIO OBTENIDO AL INICIAR SESIÓN', user); */
-        /* this.router.navigateByUrl('/pages/student-tabs/tabs', { replaceUrl: true }); */
-        /* this.goToStudentTabs(); */
       }
+
     });
+
+
+
+
+
   }
 
   get email() {
@@ -71,6 +75,8 @@ export class LoginPage implements OnInit {
         this.showAlert('Inicio de sesión fallido', data.error.message);
       }
     });
+
+
   }
   async forgotPw() {
     const alert = await this.alertController.create({
@@ -166,26 +172,13 @@ export class LoginPage implements OnInit {
     this.router.navigate(['register']);
   }
 
-/*   redirectBasedOnRolValue(userId: string) {
-    this.userService.getUserRolObservable(userId).subscribe({
-      next: rol => {
-        console.log('ROL:', rol); // 1: student, 2: teacher
-        if (rol === 1) {
-          this.goToStudentTabs();
-        } else if (rol === 2) {
-          this.goToTeacherTabs();
-        }
-      },
-      error: error => {
-        console.error('Error fetching user rol:', error);
-      }
-    });
-  } */
-  redirectBasedOnRolValue(userModel: UserModel) {
-    if (userModel.rol === 1) {
+
+
+  redirectByRolValue(numberRol: number) {
+    if (numberRol === 1) {
       console.log('en redirect:');
       this.goToStudentTabs();
-    } else if (userModel.rol === 2) {
+    } else if (numberRol === 2) {
       this.goToTeacherTabs();
     }
   }
@@ -193,10 +186,7 @@ export class LoginPage implements OnInit {
   getUserFromPublicTable(userId: string) {
     this.userService.getUserDetailsObservable(userId).subscribe({
       next: user => {
-      /*   console.log('User Details:', user); */
         this.userFromPublic = user[0];
-    /*     console.log('User From Public:', this.userFromPublic); */
-        // Access all fields of the user object like user.rol, user.email, user.id, etc.
       },
       error: error => {
         console.error('Error fetching user details:', error);
@@ -206,5 +196,14 @@ export class LoginPage implements OnInit {
 
   ngOnInit(): void {
 
+
+    this.credentials.get('email').setValue('combustion.1@gmail.com');
+    this.credentials.get('password').setValue('654321');
+
   }
+
+
+
 }
+
+

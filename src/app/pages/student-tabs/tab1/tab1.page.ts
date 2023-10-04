@@ -30,8 +30,10 @@ export class Tab1Page {
         const userId = this.authService.getCurrentUserId();
         console.log('USER ID:', userId);
         this.getUserFromPublicTable(userId);
+        this.redirectBasedOnRolValue(this.userFromPublic);
         if (this.userFromPublic !== undefined) {
           console.log('USER FROM PUBLIC2:', this.userFromPublic);
+          this.redirectBasedOnRolValue(this.userFromPublic);
         }
 
       }
@@ -50,5 +52,22 @@ export class Tab1Page {
         console.error('Error fetching user details:', error);
       }
     });
+  }
+
+  redirectBasedOnRolValue(userModel: UserModel) {
+    if (userModel.rol === 1) {
+      console.log('en redirect:');
+      this.goToStudentTabs();
+    } else if (userModel.rol === 2) {
+      this.goToTeacherTabs();
+    }
+  }
+
+  goToStudentTabs() {
+    this.router.navigate(['student/tabs/tab1']);
+  }
+
+  goToTeacherTabs() {
+    this.router.navigate(['teacher/tabs/tab1']);
   }
 }
