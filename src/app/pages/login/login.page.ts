@@ -44,6 +44,7 @@ export class LoginPage implements OnInit {
         this.userId = this.authService.getCurrentUserId();
         console.log('USER ID:', this.userId);
         const userRol = this.userService.getUserRol(this.userId);
+        console.log('USER ROL:', userRol);
         this.redirectByRolValue(await userRol);
 
       }
@@ -198,7 +199,7 @@ export class LoginPage implements OnInit {
 
 
     this.credentials.get('email').setValue('combustion.1@gmail.com');
-    this.credentials.get('password').setValue('654321');
+    this.credentials.get('password').setValue('123456');
 
   }
 

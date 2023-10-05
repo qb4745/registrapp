@@ -40,8 +40,19 @@ export class UserService {
   }
 
   getUserDetailsObservable(userId: string): Observable<any> {
-    const url = `${this.apiUrl}?id=eq.${userId}&select=*`;
+    const url = `${this.apiUrl}users?id=eq.${userId}&select=*`;
 
+    // Set the headers including the API key
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'apikey': this.apiKey
+    });
+
+    return this.http.get<any[]>(url, { headers: headers });
+  }
+  getUserCarrerraObservable(userId: string): Observable<any> {
+    const url = `${this.apiUrl}carreras?select=nombre_carrera&select=*,users(id=eq.${userId}),carreras(*)`;
+    console.log('url getUserCarrerraObservable:', url);
     // Set the headers including the API key
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -52,7 +63,7 @@ export class UserService {
   }
 
   async getUserRol(userId: string): Promise<number> {
-    const url = `${this.apiUrl}?id=eq.${userId}&select=rol`;
+    const url = `${this.apiUrl}users?id=eq.${userId}&select=rol`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'apikey': this.apiKey
