@@ -215,17 +215,8 @@ export class Tab1Page implements OnInit{
       name_last: ['', Validators.required]
     });
 
-    JsBarcode("#barcode", "1234", {
-      format: "pharmacode",
-      width: 4,
-      height: 200,
-      displayValue: false,
-    });
 
-    // Get the canvas element containing the barcode
-    const canvas = document.getElementById('barcode') as HTMLCanvasElement;
 
-    // Convert the canvas content to a base64 data URL
-    this.barcodeDataURL = canvas.toDataURL('image/png');
+
   }
 }

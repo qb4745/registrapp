@@ -1,5 +1,5 @@
 import { Component, EnvironmentInjector, inject } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { ActionSheetController, IonicModule } from '@ionic/angular';
 import { UserModel } from 'src/app/models/UserModel';
 
 @Component({
@@ -12,6 +12,7 @@ import { UserModel } from 'src/app/models/UserModel';
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
 
+  constructor(
+  ) {}
 
-  constructor() {}
 }
