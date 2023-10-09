@@ -18,7 +18,7 @@ import { UserModel } from 'src/app/models/UserModel';
 })
 export class LoginPage implements OnInit {
   private supabase: SupabaseClient;
-  private userFromPublic: UserModel;
+  private userFromPublicSchema: any;
   private userId: string;
 
   credentials = this.fb.group({
@@ -36,26 +36,38 @@ export class LoginPage implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    console.log("constructor init carga");
-    this.authService.getCurrentUser().subscribe(async (user) => {
-      if (user) {
-
-        console.log('USER FROM PUBLIC1:', this.userFromPublic);
-        this.userId = this.authService.getCurrentUserId();
-        console.log('USER ID:', this.userId);
-        const userRol = this.userService.getUserRol(this.userId);
-        console.log('USER ROL:', userRol);
-        this.redirectByRolValue(await userRol);
-
-      }
-
-    });
-
-
-
-
 
   }
+
+  ngOnInit(): void {
+    this.authService.getCurrentUser().subscribe((user) => {
+      if (user) {
+        this.userId = this.authService.getCurrentUserId();
+        console.log('ngonit:', this.userId);
+        this.userService.getUserObservable(this.userId).subscribe(
+          (user) => {
+            // Handle the API response here
+            this.userFromPublicSchema = user[0];
+            console.log('User student ion will enter:', this.userFromPublicSchema);
+            console.log('User student ion will enter ROL:', this.userFromPublicSchema.rol);
+            this.redirectByRolValue(this.userFromPublicSchema.rol);
+          },
+          (error) => {
+            // Handle errors here
+            console.error('Error fetching user data:', error);
+          }
+        );
+
+      }
+    });
+    this.credentials.get('email').setValue('combustion.1@gmail.com');
+    this.credentials.get('password').setValue('123456');
+  }
+
+  async ionViewWillEnter() {
+
+  }
+
 
   get email() {
     return this.credentials.controls.email;
@@ -161,6 +173,15 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
+  redirectByRolValue(numberRol: number) {
+    if (numberRol === 1) {
+      console.log('en redirect:');
+      this.goToStudentTabs();
+    } else if (numberRol === 2) {
+      this.goToTeacherTabs();
+    }
+  }
+
   goToStudentTabs() {
     this.router.navigate(['student/tabs/tab1']);
   }
@@ -175,33 +196,10 @@ export class LoginPage implements OnInit {
 
 
 
-  redirectByRolValue(numberRol: number) {
-    if (numberRol === 1) {
-      console.log('en redirect:');
-      this.goToStudentTabs();
-    } else if (numberRol === 2) {
-      this.goToTeacherTabs();
-    }
-  }
-
-  getUserFromPublicTable(userId: string) {
-    this.userService.getUserDetailsObservable(userId).subscribe({
-      next: user => {
-        this.userFromPublic = user[0];
-      },
-      error: error => {
-        console.error('Error fetching user details:', error);
-      }
-    });
-  }
-
-  ngOnInit(): void {
 
 
-    this.credentials.get('email').setValue('combustion.1@gmail.com');
-    this.credentials.get('password').setValue('123456');
 
-  }
+
 
 
 

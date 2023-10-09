@@ -1,7 +1,6 @@
 export const environment = {
   production: true,
   supabaseUrl: 'https://qzhofresgxsiyccsjsbi.supabase.co',
-  supabaseApiUrl: 'https://kvtpgtomhheyppcrztte.supabase.co/rest/v1/',
   supabaseKey:
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
     'eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6aG9mcmVzZ3hzaXljY3Nqc2JpIiwicm9sZSI6InNlc' +

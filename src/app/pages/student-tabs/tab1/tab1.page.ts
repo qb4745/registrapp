@@ -74,44 +74,13 @@ export class Tab1Page implements OnInit{
       if (user) {
         const userId = this.authService.getCurrentUserId();
         console.log('studiante constructor :', userId);
-        this.getUserFromPublicTable(userId);
-        console.log('studiante constructor2 :', this.userFromPublic);
-        this.getUserCarreraFromPublicTable(this.userId);
-        console.log('studiante carrera constructor3 :', this.nombreCarrera);
-
 
 
       }
     });
   }
 
-  getUserFromPublicTable(userId: string) {
-    this.userService.getUserDetailsObservable(userId).subscribe({
-      next: user => {
-        this.userFromPublic = user[0];
-        console.log('User Details getUserFromPublicTable:', this.userFromPublic);
-    /*     console.log('User From Public:', this.userFromPublic); */
-        // Access all fields of the user object like user.rol, user.email, user.id, etc.
-      },
-      error: error => {
-        console.error('Error fetching user details:', error);
-      }
-    });
-  }
 
-  getUserCarreraFromPublicTable(userId: string) {
-    this.userService.getUserCarrerraObservable(userId).subscribe({
-      next: carrera => {
-      /*   console.log('User Details:', user); */
-        this.nombreCarrera = carrera[0];
-    /*     console.log('User From Public:', this.userFromPublic); */
-        // Access all fields of the user object like user.rol, user.email, user.id, etc.
-      },
-      error: error => {
-        console.error('Error fetching user details:', error);
-      }
-    });
-  }
 
   redirectBasedOnRolValue(userModel: UserModel) {
     if (userModel.rol === 1) {
@@ -195,20 +164,7 @@ export class Tab1Page implements OnInit{
   }
 
   ngOnInit(): void {
-    this.userService.getUserCarrerraObservable(this.userId).subscribe(
-      (data) => {
-        // Handle the data returned from the API
-        console.log('API Response:', data);
-        this.nombreCarrera = data[0];
-        console.log('subs API Response:', this.nombreCarrera);
-        // You can assign the data to a component property for use in the template
-        // this.careerData = data;
-      },
-      (error) => {
-        // Handle errors here
-        console.error('API Error:', error);
-      }
-    );
+
      // Setup form
      this.editProfileForm = this.formBuilder.group({
       name_first: ['', Validators.required],

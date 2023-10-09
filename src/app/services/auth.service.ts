@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  private currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(null);
+  public currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(null);
   private userId: string;
 
   constructor(private router: Router) {

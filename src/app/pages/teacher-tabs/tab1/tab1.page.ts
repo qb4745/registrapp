@@ -28,7 +28,6 @@ export class Tab1Page {
       if (user) {
         const userId = this.authService.getCurrentUserId();
         console.log('USER ID:', userId);
-        this.getUserFromPublicTable(userId);
         if (this.userFromPublic !== undefined) {
           console.log('USER FROM PUBLIC2:', this.userFromPublic);
           this.redirectBasedOnRolValue(this.userFromPublic);
@@ -38,19 +37,7 @@ export class Tab1Page {
     });
   }
 
-  getUserFromPublicTable(userId: string) {
-    this.userService.getUserDetailsObservable(userId).subscribe({
-      next: user => {
-      /*   console.log('User Details:', user); */
-        this.userFromPublic = user[0];
-    /*     console.log('User From Public:', this.userFromPublic); */
-        // Access all fields of the user object like user.rol, user.email, user.id, etc.
-      },
-      error: error => {
-        console.error('Error fetching user details:', error);
-      }
-    });
-  }
+
 
   redirectBasedOnRolValue(userModel: UserModel) {
     if (userModel.rol === 1) {
