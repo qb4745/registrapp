@@ -56,7 +56,7 @@
                 </ion-buttons>
               </ion-toolbar>
             </ion-header>
-            <ion-content *ngIf="userFromPublic && nombreCarrera">
+            <ion-content *ngIf="userFromPublic">
               <ion-card class="profile-card">
                 <ion-card-content>
                   <ion-avatar class="img2">
@@ -78,10 +78,10 @@
                     >
                   </p>
 
-                  <h2 *ngIf="nombreCarrera">
+                  <h2 *ngIf="userFromPublic">
                     <ion-text color="medium"
                       ><strong>
-                        Carrera: {{ nombreCarrera.nombre_carrera }}
+                        Carrera: {{ userFromPublic.carreras.nombre_carrera }}
                       </strong></ion-text
                     >
                   </h2>

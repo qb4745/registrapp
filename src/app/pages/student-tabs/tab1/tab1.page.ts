@@ -20,9 +20,9 @@ import { ToastService } from 'src/app/services/toast.service';
   imports: [IonicModule, CommonModule, ExploreContainerComponent, FormsModule],
 })
 export class Tab1Page implements OnInit{
-  public userFromPublic: UserModel;
-  public nombreCarrera: CarreraModel;
+  public userFromPublic: any;
   private userId: string;
+  public nombreCarrera: CarreraModel;
   barCodeString = '12345566765';
 
   barcodeDataURL: string;
@@ -61,24 +61,42 @@ export class Tab1Page implements OnInit{
     private router: Router,
     private userService: UserService,
 
-
     private formBuilder: FormBuilder,
     private toastService: ToastService,
     private navController: NavController,
     private actionSheetController: ActionSheetController
-
-
   ) {
 
-    this.authService.getCurrentUser().subscribe(async (user) => {
-      if (user) {
-        const userId = this.authService.getCurrentUserId();
-        console.log('studiante constructor :', userId);
 
-
-      }
-    });
   }
+
+
+    ngOnInit(): void {
+      this.userId = this.authService.getCurrentUserId();
+      console.log('studiante ngOnInit :', this.userId);
+      this.userService.getUserInfoAndCarrera(this.userId).subscribe({
+        next: (userData) => {
+          console.log('User ngonit:', userData);
+          this.userFromPublic = userData[0]; // Assign the received data to your class property
+        },
+        error: (error) => {
+          console.error('Error occurred:', error);
+        },
+        complete: () => {
+          console.log('Observable completed');
+        }
+      });
+
+      // Setup form
+      this.editProfileForm = this.formBuilder.group({
+       name_first: ['', Validators.required],
+       name_last: ['', Validators.required]
+     });
+   }
+
+ async ionViewWillEnter() {
+
+}
 
 
 
@@ -163,16 +181,6 @@ export class Tab1Page implements OnInit{
     }
   }
 
-  ngOnInit(): void {
-
-     // Setup form
-     this.editProfileForm = this.formBuilder.group({
-      name_first: ['', Validators.required],
-      name_last: ['', Validators.required]
-    });
 
 
-
-
-  }
 }
