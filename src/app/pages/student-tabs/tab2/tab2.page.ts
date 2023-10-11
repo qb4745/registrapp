@@ -4,6 +4,7 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -17,7 +18,7 @@ export class Tab2Page implements OnInit{
   isSupported = false;
   barcodes: Barcode[] = [];
 
-  constructor(private alertController: AlertController) {}
+  constructor(private alertController: AlertController, private router: Router) {}
 
   ngOnInit() {
     BarcodeScanner.isSupported().then((result) => {
@@ -32,7 +33,9 @@ export class Tab2Page implements OnInit{
       return;
     }
     const { barcodes } = await BarcodeScanner.scan();
+    this.goToStudentTabs2();
     this.barcodes.push(...barcodes);
+
   }
 
   async requestPermissions(): Promise<boolean> {
@@ -47,5 +50,9 @@ export class Tab2Page implements OnInit{
       buttons: ['OK'],
     });
     await alert.present();
+  }
+
+  goToStudentTabs2() {
+    this.router.navigate(['student/tabs/tab2']);
   }
 }
