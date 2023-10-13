@@ -79,55 +79,10 @@
 
     <hr class="hr-medium" />
 
-    <ion-list-header class="ion-list-header-small">
-      <ion-label>
-        <ion-text color="tertiary">Actions</ion-text>
-      </ion-label>
-    </ion-list-header>
-
-    <ion-list class="list-custom" lines="full">
-      <ion-item color="primary" detail="false">
-        <ion-avatar slot="start" class="ion-avatar-default-icon">
-          <ion-icon color="tertiary" name="receipt"></ion-icon>
-        </ion-avatar>
-        <ion-label>
-          <h3>Receipt</h3>
-          <p class="font-size-smallest">View digital invoice</p>
-        </ion-label>
-        <ion-button color="secondary" slot="end"> View </ion-button>
-      </ion-item>
-
-      <ion-item color="primary" button>
-        <ion-avatar slot="start" class="ion-avatar-default-icon">
-          <ion-icon color="tertiary" name="chatbox"></ion-icon>
-        </ion-avatar>
-        <ion-label>
-          <h3>Contact merchant</h3>
-          <p class="font-size-smallest">Get in touch with merchant</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-button class="ion-button-small" color="secondary" expand="block">
+      Registrar asistencia
+    </ion-button>
   </div>
-</ion-content>
-
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let barcode of barcodes">
-      <ion-label position="stacked">{{ barcode.format }}</ion-label>
-      <ion-input type="text" [value]="barcode.rawValue"></ion-input>
-    </ion-item>
-  </ion-list>
-  <ion-item *ngIf="qrCode">
-    <ion-label position="stacked">{{ qrCode }}</ion-label>
-    <ion-input type="text" [value]="qrCode"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="asistencia">
-    <ion-label position="stacked">{{ asistencia.id }}</ion-label>
-    <ion-input type="text" [value]="asistencia.id"></ion-input>
-    <ion-label position="stacked">{{ asistencia.id_seccion }}</ion-label>
-    <ion-input type="text" [value]="asistencia.id_seccion"></ion-input>
-    <ion-label position="stacked">{{ asistencia.id_alumno }}</ion-label>
-  </ion-item>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="scan()" [disabled]="!isSupported">
       <ion-icon name="scan"></ion-icon>

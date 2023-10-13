@@ -36,7 +36,6 @@ export class Tab2Page implements OnInit{
 
     this.getUserAsistenciaFromObservable(this.qrCode);
 
-
   }
 
 
