@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { HttpClientModule } from '@angular/common/http';
 import { UserModel } from 'src/app/models/UserModel';
+import { AlumnoService } from 'src/app/services/alumno.service';
+import { ProfesorService } from 'src/app/services/profesor.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginPage implements OnInit {
   private supabase: SupabaseClient;
   private userFromPublicSchema: any;
   private userId: string;
+  private rol: number = 2;
 
   credentials = this.fb.group({
     email: ['', Validators.required],
@@ -34,7 +36,9 @@ export class LoginPage implements OnInit {
     private loadingController: LoadingController,
     private alertController: AlertController,
     private router: Router,
-    private userService: UserService
+    // private userService: UserService
+    private alumnoService: AlumnoService,
+    private profesorService: ProfesorService
   ) {
 
   }
@@ -43,23 +47,42 @@ export class LoginPage implements OnInit {
     this.authService.getCurrentUser().subscribe((user) => {
       if (user) {
         this.userId = this.authService.getCurrentUserId();
-        // console.log('ngonit:', this.userId);
-        this.userService.getUserObservable(this.userId).subscribe(
+        console.log('ngonit:', this.userId);
+
+        this.alumnoService.getAlumnoInfo(this.userId).subscribe(
           (user) => {
-            // Handle the API response here
-            this.userFromPublicSchema = user[0];
-            // console.log('User student ion will enter:', this.userFromPublicSchema);
-            // console.log('User student ion will enter ROL:', this.userFromPublicSchema.rol);
-            this.redirectByRolValue(this.userFromPublicSchema.rol);
+
+            console.log('user rol:', user[0]);
+            if (user[0].rol === undefined) {
+              return;
+            }
+            this.redirectByRolValue(user[0].rol);
+
+
+
           },
           (error) => {
-            // Handle errors here
+            console.error('Error fetching user data:', error);
+          }
+        );
+        this.profesorService.getProfesorInfo(this.userId).subscribe(
+          (user) => {
+
+            if (user[0].rol === undefined) {
+              return;
+            }
+            this.redirectByRolValue(user[0].rol);
+          },
+          (error) => {
             console.error('Error fetching user data:', error);
           }
         );
 
+
       }
+
     });
+
     this.credentials.get('email').setValue('combustion.1@gmail.com');
     this.credentials.get('password').setValue('123456');
   }
@@ -173,11 +196,12 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  redirectByRolValue(numberRol: number) {
+
+  redirectByRolValue(numberRol: number | undefined) {
     if (numberRol === 1) {
       // console.log('en redirect:');
       this.goToStudentTabs();
-    } else if (numberRol === 2) {
+    } else if (numberRol === 2)  {
       this.goToTeacherTabs();
     }
   }
