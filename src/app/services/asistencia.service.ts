@@ -48,21 +48,39 @@ export class AsistenciaService {
 
     return this.http.get<any>(`${this.apiUrl}`, { headers, params });
   }
-/*   [
-    {
-        "id": "ad5ea2cd-d6ea-4c0a-8656-1a8e1898af9c",
-        "email": "combustion.1@gmail.com",
-        "nombre": "jaime",
-        "apaterno": "vicencio",
-        "amaterno": "rubilar",
-        "carrera_id": 1,
-        "rol": 1,
-        "carreras": {
-            "nombre_carrera": "Ingeniería en Informática"
-        }
-    }
-] */
 
+  updateAsistioStatusToTrue(asistenciaId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Content-Type': 'application/json' // Specify content type for PATCH request
+    });
 
+    const body = {
+      asistio: true
+    };
 
+    const params = {
+      id: `eq.${asistenciaId}`
+    };
+
+    return this.http.patch<any>(`${this.apiUrl}`, body, { headers, params });
+  }
+  updateAsistioStatusToFalse(asistenciaId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Content-Type': 'application/json' // Specify content type for PATCH request
+    });
+
+    const body = {
+      asistio: false
+    };
+
+    const params = {
+      id: `eq.${asistenciaId}`
+    };
+
+    return this.http.patch<any>(`${this.apiUrl}`, body, { headers, params });
+  }
 }

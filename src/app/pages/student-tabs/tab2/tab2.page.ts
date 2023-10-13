@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,9 @@ import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
   selector: 'app-tab2',
@@ -17,28 +20,73 @@ import { AsistenciaService } from 'src/app/services/asistencia.service';
     FormsModule]
 })
 export class Tab2Page implements OnInit{
-  isSupported = false;
+  public isSupported = false;
+  public isPermissionGranted = false;
+
+  public formGroup = new UntypedFormGroup({
+    googleBarcodeScannerModuleInstallState: new UntypedFormControl(0),
+    googleBarcodeScannerModuleInstallProgress: new UntypedFormControl(0),
+  });
+
   barcodes: Barcode[] = [];
   public userFromPublic: any;
   private userId: string;
-  qrCode: string = "68b98911-2d4d-43bd-b262-d25c5d9c9c22";
+  // qrCode: string = "1";
+  qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
   asistencia: any;
 
+  @ViewChild(IonModal) modal: IonModal;
+
+  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  name: string;
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      this.message = `Hello, ${ev.detail.data}!`;
+    }
+  }
+
+
+
+
+
   constructor(private alertController: AlertController, private router: Router, private authService: AuthService,
-              private asistenciaService: AsistenciaService) {}
+              private asistenciaService: AsistenciaService, private readonly ngZone: NgZone) {}
 
   ngOnInit() {
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
+/*     BarcodeScanner.removeAllListeners().then(() => {
+      BarcodeScanner.addListener(
+        'googleBarcodeScannerModuleInstallProgress',
+        (event) => {
+          this.ngZone.run(() => {
+            console.log('googleBarcodeScannerModuleInstallProgress', event);
+            const { state, progress } = event;
+            this.formGroup.patchValue({
+              googleBarcodeScannerModuleInstallState: state,
+              googleBarcodeScannerModuleInstallProgress: progress,
+            });
+          });
+        }
+      );
+    }); */
     this.userId = this.authService.getCurrentUserId();
     console.log('studiante ngOnInit :', this.userId);
 
     this.getUserAsistenciaFromObservable(this.qrCode);
 
   }
-
-
 
   async scan(): Promise<void> {
     const granted = await this.requestPermissions();
@@ -72,8 +120,6 @@ export class Tab2Page implements OnInit{
     });
   }
 
-
-
   async requestPermissions(): Promise<boolean> {
     const { camera } = await BarcodeScanner.requestPermissions();
     return camera === 'granted' || camera === 'limited';
@@ -88,7 +134,42 @@ export class Tab2Page implements OnInit{
     await alert.present();
   }
 
+  public async openSettings(): Promise<void> {
+    await BarcodeScanner.openSettings();
+  }
+
+  public async installGoogleBarcodeScannerModule(): Promise<void> {
+    await BarcodeScanner.installGoogleBarcodeScannerModule();
+  }
+
   goToStudentTabs2() {
     this.router.navigate(['student/tabs/tab2']);
   }
+
+  updateAsistioFieldToTrue(qrCode: string): void {
+    this.asistenciaService.updateAsistioStatusToTrue(qrCode).subscribe(
+      response => {
+        console.log('Asistencia actualizada: True');
+      },
+      error => {
+        console.error('Error updating record:', error);
+      }
+    );
+  }
+  updateAsistioFieldToFalse(qrCode: string): void {
+    this.asistenciaService.updateAsistioStatusToFalse(qrCode).subscribe(
+      response => {
+        console.log('Asistencia actualizada: False');
+      },
+      error => {
+        console.error('Error updating record:', error);
+      }
+    );
+  }
+
+
+
+
+
+
 }

@@ -1,6 +1,85 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark">
     <ion-title color="light" class="centered-title">Asistencia</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button id="open-modal-scanner" color="light">
+        <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-modal
+      trigger="open-modal-scanner"
+      (willDismiss)="onWillDismiss($event)"
+    >
+      <ng-template>
+        <ion-header>
+          <ion-toolbar color="dark">
+            <ion-title slot="primary">Configuración Qr Scanner</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true"
+                >cerrar</ion-button
+              >
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <hr />
+        <ion-content class="ion-padding" [fullscreen]="true">
+          <ion-list-header class="ion-list-header-small">
+            <ion-label>
+              <ion-text color="tertiary">Acciones</ion-text>
+            </ion-label>
+          </ion-list-header>
+
+          <ion-list lines="full">
+            <ion-item
+              color="primary"
+              detail="false"
+              (click)="installGoogleBarcodeScannerModule()"
+              [disabled]="!isSupported"
+            >
+              <ion-icon
+                slot="start"
+                color="medium"
+                name="scan-outline"
+              ></ion-icon>
+              <ion-label>
+                <h3>Instalar módulo Google Barcode Scanner</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item
+              color="primary"
+              detail="false"
+              (click)="requestPermissions()"
+              [disabled]="isPermissionGranted"
+            >
+              <ion-icon
+                slot="start"
+                color="medium"
+                name="key-outline"
+              ></ion-icon>
+              <ion-label>
+                <h3>Petición de Permisos</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item
+              color="primary"
+              detail="false"
+              (click)="openSettings()"
+              [disabled]="!isSupported"
+            >
+              <ion-icon
+                slot="start"
+                color="medium"
+                name="hammer-outline"
+              ></ion-icon>
+              <ion-label>
+                <h3>Configuración Aplicación</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
   </ion-toolbar>
 </ion-header>
 
@@ -77,12 +156,27 @@
       </ion-item>
     </ion-list>
 
-    <hr class="hr-medium" />
-
-    <ion-button class="ion-button-small" color="secondary" expand="block">
+    <ion-button
+      *ngIf="asistencia"
+      class="ion-button-small"
+      color="secondary"
+      expand="block"
+      (click)="updateAsistioFieldToTrue( asistencia.id )"
+    >
       Registrar asistencia
     </ion-button>
+    <ion-button
+      *ngIf="asistencia"
+      class="ion-button-small"
+      color="secondary"
+      expand="block"
+      (click)="updateAsistioFieldToFalse( asistencia.id )"
+    >
+      Registrar asistencia | False
+    </ion-button>
   </div>
+</ion-content>
+<ion-content style="height: 20%">
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="scan()" [disabled]="!isSupported">
       <ion-icon name="scan"></ion-icon>
