@@ -14,19 +14,11 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/student-tabs/tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'student/:id',
-    loadChildren: () => import('./pages/student-tabs/tabs/tabs.routes').then((m) => m.routes),
-  },
-  {
     path: 'password-recovery',
     loadComponent: () => import('./pages/password-recovery/password-recovery.page').then( m => m.PasswordRecoveryPage)
   },
   {
     path: 'teacher',
-    loadChildren: () => import('./pages/teacher-tabs/tabs/tabs.routes').then( m => m.routes)
-  },
-  {
-    path: 'teacher/:id',
     loadChildren: () => import('./pages/teacher-tabs/tabs/tabs.routes').then( m => m.routes)
   },
 

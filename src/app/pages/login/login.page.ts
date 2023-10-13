@@ -47,12 +47,10 @@ export class LoginPage implements OnInit {
     this.authService.getCurrentUser().subscribe((user) => {
       if (user) {
         this.userId = this.authService.getCurrentUserId();
-        console.log('ngonit:', this.userId);
 
         this.alumnoService.getAlumnoInfo(this.userId).subscribe(
           (user) => {
 
-            console.log('user rol:', user[0]);
             if (user[0].rol === undefined) {
               return;
             }

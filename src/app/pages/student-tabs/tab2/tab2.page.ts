@@ -21,7 +21,7 @@ export class Tab2Page implements OnInit{
   barcodes: Barcode[] = [];
   public userFromPublic: any;
   private userId: string;
-  qrCode: string = "84661927-b513-46d1-9216-d3f40ba17dad";
+  qrCode: string = "68b98911-2d4d-43bd-b262-d25c5d9c9c22";
   asistencia: any;
 
   constructor(private alertController: AlertController, private router: Router, private authService: AuthService,
@@ -59,9 +59,9 @@ export class Tab2Page implements OnInit{
       console.log('QR code invalido');
       return;
     }
-    this.asistenciaService.getUserAsistenciaDetails(qrCode).subscribe({
+    this.asistenciaService.getUserAsistenciaNestedJoinsDetails(qrCode).subscribe({
       next: (userData) => {
-        console.log('getUserAsistenciaFromObservable:', userData);
+        console.log('getUserAsistenciaFromObservable:', userData[0]);
         this.asistencia = userData[0]; // Assign the received data to your class property
       },
       error: (error) => {

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { UserModel } from 'src/app/models/UserModel';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import * as JsBarcode from 'jsbarcode';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -11,6 +10,7 @@ import { ActionSheetController, AnimationController, IonModal, IonicModule, NavC
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CarreraModel } from 'src/app/models/CarreraModel';
 import { ToastService } from 'src/app/services/toast.service';
+import { AlumnoService } from 'src/app/services/alumno.service';
 
 @Component({
   selector: 'app-tab1',
@@ -59,7 +59,7 @@ export class Tab1Page implements OnInit{
   constructor(
     private authService: AuthService,
     private router: Router,
-    private userService: UserService,
+    private alumnoService: AlumnoService,
 
     private formBuilder: FormBuilder,
     private toastService: ToastService,
@@ -74,10 +74,10 @@ export class Tab1Page implements OnInit{
     ngOnInit(): void {
       this.userId = this.authService.getCurrentUserId();
       console.log('studiante ngOnInit :', this.userId);
-      this.userService.getUserInfoAndCarrera(this.userId).subscribe({
-        next: (userData) => {
-          console.log('User ngonit:', userData);
-          this.userFromPublic = userData[0]; // Assign the received data to your class property
+      this.alumnoService.getAlumnoInfoAndCarrera(this.userId).subscribe({
+        next: (alumnoData) => {
+          console.log('User ngonit:', alumnoData[0]);
+          this.userFromPublic = alumnoData[0]; // Assign the received data to your class property
         },
         error: (error) => {
           console.error('Error occurred:', error);
@@ -99,15 +99,6 @@ export class Tab1Page implements OnInit{
 }
 
 
-
-  redirectBasedOnRolValue(userModel: UserModel) {
-    if (userModel.rol === 1) {
-      console.log('en redirect:');
-      this.goToStudentTabs();
-    } else if (userModel.rol === 2) {
-      this.goToTeacherTabs();
-    }
-  }
 
   goToStudentTabs() {
     this.router.navigate(['student/tabs/tab1']);

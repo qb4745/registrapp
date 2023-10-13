@@ -1,10 +1,10 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark">
-    <ion-title color="light" class="custom-title">Asistencia</ion-title>
+    <ion-title color="light" class="centered-title">Asistencia</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="asistencia">
   <div class="ion-padding">
     <ion-list-header class="ion-list-header-small">
       <ion-label>
@@ -15,52 +15,64 @@
     <ion-list class="list-custom" lines="full">
       <ion-item color="primary">
         <ion-label>
-          <p>Amount</p>
-        </ion-label>
-        <ion-badge color="danger" mode="ios" slot="end">- $8.60</ion-badge>
-      </ion-item>
-      <ion-item color="primary">
-        <ion-label>
-          <p>Status</p>
+          <p>Fecha de Clases</p>
         </ion-label>
         <ion-input
           readonly
           slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
-          value="Completed"
+          value="{{
+          asistencia.clases.fecha | date: 'mediumDate'  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Date</p>
+          <p>Horario</p>
         </ion-label>
         <ion-input
           readonly
           slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
-          value="01 June, 2022 / 09:21"
+          value="{{
+            asistencia.clases.hora_inicio }} a {{ asistencia.clases.hora_termino  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Merchant</p>
+          <p>Asignatura</p>
         </ion-label>
         <ion-input
           readonly
           slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
-          value="Starbucks New York"
+          value="{{
+            asistencia.clases.secciones.asignaturas.nombre_asignatura }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Transaction-ID</p>
+          <p>Sección</p>
         </ion-label>
         <ion-input
           readonly
           slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
-          value="848-14E-11V"
+          value="{{
+            asistencia.clases.secciones.nombre_seccion }}"
+        ></ion-input>
+      </ion-item>
+      <ion-item color="primary">
+        <ion-label>
+          <p>Profesor</p>
+        </ion-label>
+        <ion-input
+          readonly
+          slot="end"
+          class="font-size-small ion-text-right ion-no-padding-end"
+          value="{{
+            asistencia.clases.secciones.profesores.nombre | titlecase }} {{
+              asistencia.clases.secciones.profesores.apellido_paterno | titlecase }} {{
+              asistencia.clases.secciones.profesores.apellido_materno | titlecase }}"
         ></ion-input>
       </ion-item>
     </ion-list>

@@ -1,23 +1,24 @@
 :host {
-    ion-list {
-      background-color: var(--ion-color-primary);
-    }
+  ion-list {
+    background-color: var(--ion-color-primary);
   }
+}
 
-  .profile-card {
-    border-radius: 0;
-    background: linear-gradient(135deg, var(--ion-color-dark), var(--ion-color-primary));
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    text-align: center;
-
-
-  }
-
+.profile-card {
+  border-radius: 0;
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-dark),
+    var(--ion-color-primary)
+  );
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
 
 ion-avatar {
   width: 128px;
@@ -40,4 +41,9 @@ ion-avatar {
   height: 128px;
   width: 128px;
   margin-left: 60px;
+}
+
+.centered-title {
+  text-align: center;
+  width: 100%;
 }

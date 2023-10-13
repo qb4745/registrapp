@@ -34,6 +34,20 @@ export class AsistenciaService {
 
     return this.http.get<any>(this.apiUrl, { headers, params });
   }
+  getUserAsistenciaNestedJoinsDetails(asistenciaId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Range': '0-9'
+    });
+
+    const params = {
+      id: `eq.${asistenciaId}`,
+      select: '*,clases(*,secciones(*,profesores(*),asignaturas(*,carreras(*,alumnos(*))))))'
+    };
+
+    return this.http.get<any>(`${this.apiUrl}`, { headers, params });
+  }
 /*   [
     {
         "id": "ad5ea2cd-d6ea-4c0a-8656-1a8e1898af9c",
