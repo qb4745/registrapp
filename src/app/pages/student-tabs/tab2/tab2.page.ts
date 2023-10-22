@@ -31,8 +31,8 @@ export class Tab2Page implements OnInit{
   barcodes: Barcode[] = [];
   public userFromPublic: any;
   private userId: string;
-  qrCode: string = "1";
-  // qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
+  // qrCode: string = "1";
+  qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
   asistencia: any;
 
   @ViewChild(IonModal) modal: IonModal;

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
@@ -6,7 +6,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { HttpClientModule } from '@angular/common/http';
-import { UserModel } from 'src/app/models/UserModel';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { ProfesorService } from 'src/app/services/profesor.service';
 
@@ -14,6 +13,7 @@ import { ProfesorService } from 'src/app/services/profesor.service';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Default,
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule]
 })
@@ -28,6 +28,8 @@ export class LoginPage implements OnInit {
     password: ['', Validators.required],
   });
 
+  private initialized = false;
+
 
 
   constructor(
@@ -36,7 +38,6 @@ export class LoginPage implements OnInit {
     private loadingController: LoadingController,
     private alertController: AlertController,
     private router: Router,
-    // private userService: UserService
     private alumnoService: AlumnoService,
     private profesorService: ProfesorService
   ) {
@@ -48,42 +49,30 @@ export class LoginPage implements OnInit {
       if (user) {
         this.userId = this.authService.getCurrentUserId();
 
+        // Fetch alumno info
         this.alumnoService.getAlumnoInfo(this.userId).subscribe(
-          (user) => {
+          (alumnoData) => {
+            if (alumnoData && this.initialized === false)
+              this.redirectByRolValue(alumnoData[0].rol);
 
-            if (user[0].rol === undefined) {
-              return;
-            }
-            this.redirectByRolValue(user[0].rol);
-
-
-
-          },
-          (error) => {
-            console.error('Error fetching user data:', error);
           }
         );
+
+        // Fetch profesor info
         this.profesorService.getProfesorInfo(this.userId).subscribe(
-          (user) => {
-
-            if (user[0].rol === undefined) {
-              return;
+          (profesorData) => {
+            if (profesorData && this.initialized === false) {
+              this.redirectByRolValue(profesorData[0].rol);
             }
-            this.redirectByRolValue(user[0].rol);
-          },
-          (error) => {
-            console.error('Error fetching user data:', error);
           }
         );
-
-
       }
-
     });
+
 
     this.credentials.get('email').setValue('combustion.1@gmail.com');
     this.credentials.get('password').setValue('123456');
-  }
+}
 
   async ionViewWillEnter() {
 
@@ -202,10 +191,16 @@ export class LoginPage implements OnInit {
     } else if (numberRol === 2)  {
       this.goToTeacherTabs();
     }
+    this.initialized = true;
+
   }
 
+/*   goToStudentTabs() {
+    this.router.navigate(['/student/tabs/tab1']);
+  } */
   goToStudentTabs() {
-    this.router.navigate(['student/tabs/tab1']);
+    if (this.initialized) return;
+    this.router.navigate(['student', 'tabs', 'tab1']);
   }
 
   goToTeacherTabs() {
@@ -215,6 +210,7 @@ export class LoginPage implements OnInit {
   goToRegister() {
     this.router.navigate(['register']);
   }
+
 
 
 
