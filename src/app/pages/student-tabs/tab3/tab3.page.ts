@@ -1,8 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { FormsModule } from '@angular/forms';
+import { MongobdService } from 'src/app/services/mongobd.service';
 
 @Component({
   selector: 'app-tab3',
@@ -11,24 +12,19 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [IonicModule, ExploreContainerComponent, FormsModule],
 })
-export class Tab3Page {
-  @ViewChild(IonModal) modal: IonModal;
+export class Tab3Page implements OnInit {
 
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
-  name: string;
+  constructor(private mongobdService: MongobdService) {
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
   }
 
-  confirm() {
-    this.modal.dismiss(this.name, 'confirm');
+  ngOnInit() {
+    this.mongobdService.getUser().subscribe((data) => {
+      console.log("profesores", data);
+    });
+
   }
 
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
-    }
-  }
+
 }
+
