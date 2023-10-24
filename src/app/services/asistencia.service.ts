@@ -102,11 +102,10 @@ export class AsistenciaService {
     return this.http.post<any>(`${this.apiUrlAsistenciaAlumno}`, body, { headers, });
   }
 
-/*   checkIfAsistenciaIsAlreadyCreated(asistenciaId: string, alumnoId: string): Observable<any> {
+  deleteAsistencia(asistenciaId: string, alumnoId: string): Observable<any> {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
     });
 
     const params = {
@@ -114,9 +113,10 @@ export class AsistenciaService {
       alumno_id: `eq.${alumnoId}`
     };
 
+    return this.http.delete<any>(`${this.apiUrlAsistenciaAlumno}`, { headers, params });
+  }
 
-    return this.http.get<any>(`${this.apiUrlAsistenciaAlumno}`, { headers, params });
-  } */
+
 
 
 

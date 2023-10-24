@@ -171,15 +171,11 @@
       class="ion-button-small"
       color="secondary"
       expand="block"
-      (click)="updateAsistioFieldToFalse( asistencia.id )"
+      (click)="deleteAsistenciaByButtonClick( asistencia.id, userId )"
     >
       Eliminar asistencia
     </ion-button>
   </div>
-  <ion-item>
-    <ion-label>Crescent</ion-label>
-    <ion-spinner name="crescent"></ion-spinner>
-  </ion-item>
 </ion-content>
 <ion-content style="height: 20%">
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">

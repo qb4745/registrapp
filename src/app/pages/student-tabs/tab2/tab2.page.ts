@@ -1,8 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { AlertController, IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,7 +16,7 @@ import { Observable, Subject, firstValueFrom, lastValueFrom, takeUntil } from 'r
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   standalone: true,
-  imports: [IonicModule, ExploreContainerComponent, CommonModule,
+  imports: [IonicModule, CommonModule, ReactiveFormsModule,
     FormsModule]
 })
 export class Tab2Page implements OnInit, OnDestroy{
@@ -65,8 +64,15 @@ export class Tab2Page implements OnInit, OnDestroy{
 
 
 
-  constructor(private alertController: AlertController, private router: Router, private authService: AuthService,
-              private asistenciaService: AsistenciaService, private readonly ngZone: NgZone) {}
+  constructor(
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private navCtrl: NavController,
+    private router: Router,
+    private authService: AuthService,
+    private asistenciaService: AsistenciaService,
+    private readonly ngZone: NgZone,
+    ) {}
 
   ngOnInit() {
     BarcodeScanner.isSupported().then((result) => {
@@ -115,7 +121,7 @@ export class Tab2Page implements OnInit, OnDestroy{
     this.asistenciaService.getUserAsistenciaNestedJoinsDetails(qrCode).subscribe({
       next: (userData) => {
         console.log('getUserAsistenciaFromObservable:', userData[0]);
-        this.asistencia = userData[0]; // Assign the received data to your class property
+        this.asistencia = userData[0];
         this.asistenciaId = userData[0].id;
       },
       error: (error) => {
@@ -174,43 +180,104 @@ export class Tab2Page implements OnInit, OnDestroy{
     );
   }
 
-/*   crearAsistenciaByButtonClick(asistenciaId: string, userId) {
-    console.log('asistenciaId:', asistenciaId, 'alumnoId:', userId);
-    this.asistenciaResponse$ =  this.asistenciaService.createAsistencia(asistenciaId, userId);
-    console.log('asistenciaResponse$:', this.asistenciaResponse$);
-  } */
   async checkAsistencia() {
     this.asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
     console.log(' checkAsistencia asistenciaCreated:', this.asistenciaCreated);
   }
 
-
   async crearAsistenciaByButtonClick(asistenciaId: string, userId: string) {
-    const asistenciaCreated2 = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
-    console.log(' const checkAsistencia asistenciaCreated:', asistenciaCreated2);
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
+    console.log(' const checkAsistencia asistenciaCreated:', asistenciaCreated);
     console.log(' const asistenciaId:', asistenciaId, 'alumnoId:', userId);
-    if (!asistenciaCreated2) {
 
-      console.log('asistenciaId:', asistenciaId, 'alumnoId:', userId);
+    await loading.dismiss(); // Dismiss the loading spinner
 
-      // Subscribe to the observable and handle the response and errors
-      this.asistenciaResponse$ = this.asistenciaService.createAsistencia(asistenciaId, userId)
-        .pipe(takeUntil(this.unsubscribe$));
+    if (!asistenciaCreated) {
+      const alert = await this.alertController.create({
+        header: 'Confirmación',
+        message: '¿Estás seguro de crear esta asistencia?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+              console.log('Asistencia creation canceled');
+            }
+          },
+          {
+            text: 'Aceptar',
+            handler: async () => {
+              // Perform the creation of asistencia
+              this.asistenciaResponse$ = this.asistenciaService.createAsistencia(asistenciaId, userId)
+                .pipe(takeUntil(this.unsubscribe$));
 
-      // Now you can use this.asistenciaResponse$ in your template or other parts of your component
-
-      this.asistenciaResponse$.subscribe({
-        next: (response) => console.log('Asistencia created successfully:', response),
-        error: (error) => console.error('Error creating asistencia:', error),
-        complete: () => console.log('createAsistencia completed'),
+              this.asistenciaResponse$.subscribe({
+                next: (response) => {
+                  console.log('Asistencia created successfully:', response);
+                  // Show success message
+                  this.showSuccessMessage('Asistencia registrada exitosamente');
+                },
+                error: (error) => {
+                  console.error('Error creating asistencia:', error);
+                  // Handle the error, show error message, etc.
+                },
+                complete: () => console.log('createAsistencia completed'),
+              });
+            }
+          }
+        ]
       });
-    } else {
-      console.log('Asistencia ya creada');
-    }
 
+      await alert.present();
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Aviso',
+        message: '¡Asistencia previamente registrada!',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+    }
   }
 
-  // Don't forget to unsubscribe when the component is destroyed
+  async deleteAsistenciaByButtonClick(asistenciaId: string, userId: string) {
+
+    const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
+    console.log(' cdeleteAsistenciaByButtonClick asistenciaCreated:', asistenciaCreated);
+
+
+    if (asistenciaCreated) {
+      this.asistenciaResponse$ = this.asistenciaService.deleteAsistencia(asistenciaId, userId)
+        .pipe(takeUntil(this.unsubscribe$));
+
+      this.asistenciaResponse$.subscribe({
+        next: (response) => {
+          console.log('Asistencia Eliminada successfully:', response);
+          // Show success message
+        },
+        error: (error) => {
+          console.error('Error Eliminando asistencia:', error);
+          // Handle the error, show error message, etc.
+        },
+        complete: () => console.log('Asistencia Eliminada completed'),
+      });
+    }
+  }
+
+  async showSuccessMessage(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Éxito',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
