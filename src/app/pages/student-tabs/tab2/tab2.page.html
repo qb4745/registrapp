@@ -161,7 +161,8 @@
       class="ion-button-small"
       color="secondary"
       expand="block"
-      (click)="updateAsistioFieldToTrue( asistencia.id )"
+      [disabled]="asistenciaCreated"
+      (click)="crearAsistenciaByButtonClick(asistencia.id, userId)"
     >
       Registrar asistencia
     </ion-button>
@@ -172,9 +173,13 @@
       expand="block"
       (click)="updateAsistioFieldToFalse( asistencia.id )"
     >
-      Registrar asistencia | False
+      Eliminar asistencia
     </ion-button>
   </div>
+  <ion-item>
+    <ion-label>Crescent</ion-label>
+    <ion-spinner name="crescent"></ion-spinner>
+  </ion-item>
 </ion-content>
 <ion-content style="height: 20%">
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">

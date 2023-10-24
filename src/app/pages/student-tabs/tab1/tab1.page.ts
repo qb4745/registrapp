@@ -120,6 +120,7 @@ export class Tab1Page implements OnInit{
 
   signOut() {
     this.authService.signOut();
+    this.authService.setInizializedToFalse();
   }
 
   // Update profile picture

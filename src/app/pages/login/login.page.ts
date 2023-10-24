@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
     password: ['', Validators.required],
   });
 
-  private initialized = false;
+  // private initialized = false;
 
 
 
@@ -52,7 +52,7 @@ export class LoginPage implements OnInit {
         // Fetch alumno info
         this.alumnoService.getAlumnoInfo(this.userId).subscribe(
           (alumnoData) => {
-            if (alumnoData && this.initialized === false)
+            if (alumnoData && this.authService.initialized === false)
               this.redirectByRolValue(alumnoData[0].rol);
 
           }
@@ -61,7 +61,7 @@ export class LoginPage implements OnInit {
         // Fetch profesor info
         this.profesorService.getProfesorInfo(this.userId).subscribe(
           (profesorData) => {
-            if (profesorData && this.initialized === false) {
+            if (profesorData && this.authService.initialized === false) {
               this.redirectByRolValue(profesorData[0].rol);
             }
           }
@@ -191,7 +191,8 @@ export class LoginPage implements OnInit {
     } else if (numberRol === 2)  {
       this.goToTeacherTabs();
     }
-    this.initialized = true;
+    // this.initialized = true;
+    this.authService.setInizializedToTrue();
 
   }
 
@@ -199,7 +200,7 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/student/tabs/tab1']);
   } */
   goToStudentTabs() {
-    if (this.initialized) return;
+    if (this.authService.initialized) return;
     this.router.navigate(['student', 'tabs', 'tab1']);
   }
 

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,7 @@ import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { Observable, Subject, firstValueFrom, lastValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tab2',
@@ -19,9 +20,10 @@ import { OverlayEventDetail } from '@ionic/core/components';
   imports: [IonicModule, ExploreContainerComponent, CommonModule,
     FormsModule]
 })
-export class Tab2Page implements OnInit{
+export class Tab2Page implements OnInit, OnDestroy{
   public isSupported = false;
   public isPermissionGranted = false;
+  public asistenciaCreated = false;
 
   public formGroup = new UntypedFormGroup({
     googleBarcodeScannerModuleInstallState: new UntypedFormControl(0),
@@ -30,10 +32,14 @@ export class Tab2Page implements OnInit{
 
   barcodes: Barcode[] = [];
   public userFromPublic: any;
-  private userId: string;
+  public userId: string;
+  private asistenciaId: string;
   // qrCode: string = "1";
   qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
   asistencia: any;
+  public asistenciaResponse$: Observable<any>;
+  // Create a subject to manage the subscription lifecycle
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   @ViewChild(IonModal) modal: IonModal;
 
@@ -103,13 +109,14 @@ export class Tab2Page implements OnInit{
 
   getUserAsistenciaFromObservable(qrCode: string) {
     if (qrCode.length !== 36) {
-      console.log('QR code invalido');
+      console.log('QR code no pertenece a ninguna asistencia.');
       return;
     }
     this.asistenciaService.getUserAsistenciaNestedJoinsDetails(qrCode).subscribe({
       next: (userData) => {
         console.log('getUserAsistenciaFromObservable:', userData[0]);
         this.asistencia = userData[0]; // Assign the received data to your class property
+        this.asistenciaId = userData[0].id;
       },
       error: (error) => {
         console.error('Error occurred:', error);
@@ -165,6 +172,48 @@ export class Tab2Page implements OnInit{
         console.error('Error updating record:', error);
       }
     );
+  }
+
+/*   crearAsistenciaByButtonClick(asistenciaId: string, userId) {
+    console.log('asistenciaId:', asistenciaId, 'alumnoId:', userId);
+    this.asistenciaResponse$ =  this.asistenciaService.createAsistencia(asistenciaId, userId);
+    console.log('asistenciaResponse$:', this.asistenciaResponse$);
+  } */
+  async checkAsistencia() {
+    this.asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
+    console.log(' checkAsistencia asistenciaCreated:', this.asistenciaCreated);
+  }
+
+
+  async crearAsistenciaByButtonClick(asistenciaId: string, userId: string) {
+    const asistenciaCreated2 = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
+    console.log(' const checkAsistencia asistenciaCreated:', asistenciaCreated2);
+    console.log(' const asistenciaId:', asistenciaId, 'alumnoId:', userId);
+    if (!asistenciaCreated2) {
+
+      console.log('asistenciaId:', asistenciaId, 'alumnoId:', userId);
+
+      // Subscribe to the observable and handle the response and errors
+      this.asistenciaResponse$ = this.asistenciaService.createAsistencia(asistenciaId, userId)
+        .pipe(takeUntil(this.unsubscribe$));
+
+      // Now you can use this.asistenciaResponse$ in your template or other parts of your component
+
+      this.asistenciaResponse$.subscribe({
+        next: (response) => console.log('Asistencia created successfully:', response),
+        error: (error) => console.error('Error creating asistencia:', error),
+        complete: () => console.log('createAsistencia completed'),
+      });
+    } else {
+      console.log('Asistencia ya creada');
+    }
+
+  }
+
+  // Don't forget to unsubscribe when the component is destroyed
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 

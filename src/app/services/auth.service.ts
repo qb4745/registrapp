@@ -12,8 +12,11 @@ export class AuthService {
   private supabase: SupabaseClient;
   public currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(null);
   private userId: string;
+  public initialized = false;
+
 
   constructor(private router: Router) {
+    console.log('initialized', this.initialized);
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
     this.supabase.auth.onAuthStateChange((event, sess) => {
@@ -33,6 +36,8 @@ export class AuthService {
     });
 
     this.loadUser();
+    // this.initialized = true;
+    console.log('initialized', this.initialized);
   }
 
   async loadUser() {
@@ -97,10 +102,15 @@ export class AuthService {
     }
   }
 
-
-
-
   async setSession(access_token, refresh_token) {
     return this.supabase.auth.setSession({ access_token, refresh_token });
+  }
+
+  setInizializedToTrue() {
+    this.initialized = true;
+  }
+
+  setInizializedToFalse() {
+    this.initialized = false;
   }
 }
