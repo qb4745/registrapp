@@ -1,14 +1,21 @@
 import { CapacitorConfig } from '@capacitor/cli';
+import { Capacitor } from '@capacitor/core';
 
 const config: CapacitorConfig = {
+  appId: 'io.ionic.starter',
+  appName: 'REGISTRAPP',
+  webDir: 'www',
+  server: {
+    androidScheme:'https'
+  },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 3000,
-      launchAutoHide: true,
-      launchFadeOutDuration: 3000,
-      backgroundColor: "#ffffffff",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
+      launchShowDuration: 2000,
+      //launchAutoHide: true,
+      launchFadeOutDuration: 1000,
+      backgroundColor: "#de0f17",
+      //androidSplashResourceName: "splash",
+      //androidScaleType: "CENTER_CROP",
       showSpinner: true,
       androidSpinnerStyle: "large",
       iosSpinnerStyle: "small",
