@@ -26,5 +26,13 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
+  {
+    path: 'filter',
+    loadComponent: () => import('./pages/teacher-tabs/tab2/filter/filter.page').then( m => m.FilterPage)
+  },
+  {
+    path: 'clase-detalles',
+    loadComponent: () => import('./pages/teacher-tabs/tab2/clase-detalles/clase-detalles.page').then( m => m.ClaseDetallesPage)
+  },
 
 ];

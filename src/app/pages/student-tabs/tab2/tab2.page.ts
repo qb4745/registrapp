@@ -155,27 +155,6 @@ export class Tab2Page implements OnInit, OnDestroy{
     this.router.navigate(['student/tabs/tab2']);
   }
 
-  updateAsistioFieldToTrue(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToTrue(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: True');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
-  }
-  updateAsistioFieldToFalse(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToFalse(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: False');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
-  }
-
   async checkAsistencia() {
     this.asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
     console.log(' checkAsistencia asistenciaCreated:', this.asistenciaCreated);
