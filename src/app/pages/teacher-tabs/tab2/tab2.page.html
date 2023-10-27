@@ -1,6 +1,6 @@
 <ion-header collapse="fade" [translucent]="true">
-  <ion-toolbar color="dark">
-    <ion-title color="light"> Payments </ion-title>
+  <ion-toolbar color="dark" class="centered-title">
+    <ion-title class="light"> Clases de Hoy </ion-title>
     <ion-buttons slot="primary">
       <ion-button color="secondary" (click)="filter()">
         <ion-icon slot="icon-only" name="filter"></ion-icon>
@@ -77,11 +77,11 @@
           detail="false"
           *ngFor="let clase of clasesList"
         >
-          <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-avatar slot="start" class="ion-avatar-default-icon heart">
             <ion-icon
               color="tertiary"
               size="large"
-              name="cafe-outline"
+              name="qr-code-outline"
             ></ion-icon>
           </ion-avatar>
 

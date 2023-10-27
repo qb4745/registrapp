@@ -31,14 +31,15 @@ export class Tab2Page implements OnInit {
 
   async ngOnInit() {
 
-    // Fake timeout
-    setTimeout(() => {
-      this.content_loaded = true;
-    }, 1000);
     this.profesorId = this.authService.getCurrentUserId();
 
-    this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesList(this.profesorId));
-    console.log('clasesList tab 2 :', this.clasesList);
+    try {
+      this.clasesList = await this.clasesService.getProfesorClasesListCurrentDay(this.profesorId).toPromise();
+      this.content_loaded = true;
+      console.log('clasesList tab 2 :', this.clasesList);
+    } catch (error) {
+      console.error('Error Trayendo los datos de las clases:', error);
+    }
   }
 
   // Filter
