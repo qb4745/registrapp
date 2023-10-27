@@ -4,6 +4,8 @@ import { FilterPage } from './filter/filter.page';
 import { CommonModule } from '@angular/common';
 import { ClasesService } from 'src/app/services/clases.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { firstValueFrom } from 'rxjs';
+import { Clase } from 'src/app/interfaces/clase.interface';
 
 @Component({
   selector: 'app-tab2',
@@ -15,6 +17,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class Tab2Page implements OnInit {
 
   private profesorId: string;
+  // clasesList: any;
+  clasesList: Clase[];
 
   content_loaded: boolean = false;
 
@@ -25,18 +29,16 @@ export class Tab2Page implements OnInit {
     private authService: AuthService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
 
     // Fake timeout
     setTimeout(() => {
       this.content_loaded = true;
     }, 1000);
     this.profesorId = this.authService.getCurrentUserId();
-    console.log('profesor tab 2ngOnInit :', this.profesorId);
-    this.clasesService.getProfesorClasesList(this.profesorId).subscribe((data) => {
-      console.log('data tab 2 :', data);
-    });
 
+    this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesList(this.profesorId));
+    console.log('clasesList tab 2 :', this.clasesList);
   }
 
   // Filter
@@ -63,6 +65,13 @@ export class Tab2Page implements OnInit {
         this.content_loaded = true;
       }, 2000);
     }
+  }
+
+  getCurrentDate(): string {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    const locale = 'es-CL';
+    const currentDate = new Date();
+    return currentDate.toLocaleDateString(locale, options);
   }
 
 }

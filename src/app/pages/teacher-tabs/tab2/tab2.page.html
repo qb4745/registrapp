@@ -30,7 +30,7 @@
           color="primary"
           button
           detail="false"
-          *ngFor="let i of [].constructor(12);"
+          *ngFor="let i of [].constructor(6);"
         >
           <ion-avatar slot="start" class="ion-avatar-default-icon">
             <ion-skeleton-text animated></ion-skeleton-text>
@@ -60,19 +60,22 @@
 
     <ng-container *ngIf="content_loaded">
       <ion-list-header class="ion-list-header-small">
-        <ion-label color="tertiary">February, 2023</ion-label>
+        <ion-label color="tertiary"
+          >{{ getCurrentDate() | titlecase }}</ion-label
+        >
       </ion-list-header>
 
       <ion-list
         class="list-custom animate__animated animate__fadeIn"
         lines="full"
-        *ngIf="content_loaded"
+        *ngIf="content_loaded && clasesList"
       >
         <ion-item
           color="primary"
           button
           routerLink="clase-detalles"
           detail="false"
+          *ngFor="let clase of clasesList"
         >
           <ion-avatar slot="start" class="ion-avatar-default-icon">
             <ion-icon
@@ -83,44 +86,23 @@
           </ion-avatar>
 
           <ion-label>
-            <h3>Coffee</h3>
-            <p>Lorem Ipsum &middot; 09.04.2023</p>
+            <h3>{{ clase.nombre_seccion }}</h3>
+            <p>
+              {{ clase.fecha }} - {{ clase.hora_inicio }} a {{
+              clase.hora_termino }}
+            </p>
           </ion-label>
-          <ion-badge color="dark" slot="end">Detail</ion-badge>
-        </ion-item>
-
-        <ion-item color="primary" button routerLink="detail" detail="false">
-          <ion-avatar slot="start" class="ion-avatar-default-icon">
-            <ion-icon
-              color="tertiary"
-              size="large"
-              name="cash-outline"
-            ></ion-icon>
-          </ion-avatar>
-
-          <ion-label>
-            <h3>Salary</h3>
-            <p>Lorem Ipsum Inc. &middot; 06.03.2023</p>
-          </ion-label>
-          <ion-badge color="dark" slot="end">Detail</ion-badge>
-        </ion-item>
-
-        <ion-item color="primary" button routerLink="detail" detail="false">
-          <ion-avatar slot="start" class="ion-avatar-default-icon">
-            <ion-icon
-              color="tertiary"
-              size="large"
-              name="home-outline"
-            ></ion-icon>
-          </ion-avatar>
-
-          <ion-label>
-            <h3>Rent</h3>
-            <p>Lorem Inc. &middot; 03.02.2023</p>
-          </ion-label>
-          <ion-badge color="dark" slot="end">Detail</ion-badge>
         </ion-item>
       </ion-list>
     </ng-container>
   </div>
 </ion-content>
+
+<!-- <ion-label>
+  <h3>{{ clase.nombre_seccion }}</h3>
+  <p>
+    {{ clase.clases[0].fecha }} - {{
+    clase.clases[0].hora_inicio }} a {{
+    clase.clases[0].hora_termino }}
+  </p>
+</ion-label> -->

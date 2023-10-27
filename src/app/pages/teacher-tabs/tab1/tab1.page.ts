@@ -20,22 +20,12 @@ export class Tab1Page {
     private authService: AuthService,
     private router: Router,
     private userService: UserService,
-
-
   ) {
 
   }
 
 
 
-  redirectBasedOnRolValue(userModel: UserModel) {
-    if (userModel.rol === 1) {
-      console.log('en redirect:');
-      this.goToStudentTabs();
-    } else if (userModel.rol === 2) {
-      this.goToTeacherTabs();
-    }
-  }
 
   goToStudentTabs() {
     this.router.navigate(['student/tabs/tab1']);
