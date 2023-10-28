@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonModal, IonRouterOutlet, IonicModule, ModalController, ModalOptions,} from '@ionic/angular';
+import { IonModal, IonRouterOutlet, IonicModule, ModalController, ModalOptions, ViewWillEnter,} from '@ionic/angular';
 import { FilterPage } from './filter/filter.page';
 import { CommonModule } from '@angular/common';
 import { ClasesService } from 'src/app/services/clases.service';
@@ -15,12 +15,18 @@ import { NavigationExtras, Router } from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule, FilterPage]
 })
-export class Tab2Page implements OnInit {
+export class Tab2Page implements OnInit, ViewWillEnter {
 
   private profesorId: string;
   // clasesList: any;
   clasesList: Clase[];
   // claseInfo: Clase;
+
+  // currentDate = new Date();
+  currentDate = new Date('2023-10-27T00:00:00.000Z');
+
+
+
 
   content_loaded: boolean = false;
 
@@ -37,12 +43,36 @@ export class Tab2Page implements OnInit {
     this.profesorId = this.authService.getCurrentUserId();
 
     try {
-      this.clasesList = await this.clasesService.getProfesorClasesListCurrentDay(this.profesorId).toPromise();
+      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
       this.content_loaded = true;
       console.log('clasesList tab 2 :', this.clasesList);
     } catch (error) {
       console.error('Error Trayendo los datos de las clases:', error);
     }
+  }
+
+  async ionViewWillEnter(){
+    this.profesorId = this.authService.getCurrentUserId();
+
+    try {
+      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
+      this.content_loaded = true;
+      console.log('clasesList tab 2 :', this.clasesList);
+    } catch (error) {
+      console.error('Error Trayendo los datos de las clases:', error);
+    }
+  }
+  async ionViewDidEnter(){
+    this.profesorId = this.authService.getCurrentUserId();
+
+    try {
+      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
+      this.content_loaded = true;
+      console.log('clasesList tab 2 :', this.clasesList);
+    } catch (error) {
+      console.error('Error Trayendo los datos de las clases:', error);
+    }
+
   }
 
   // Filter

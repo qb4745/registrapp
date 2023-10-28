@@ -66,7 +66,7 @@ export class ClasesService {
     );
   }
 
-  getProfesorClasesListCurrentDay(profesorId: string): Observable<Clase[]> {
+  getProfesorClasesListCurrentDay(profesorId: string, fechaDeHoy: string): Observable<Clase[]> {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
@@ -92,7 +92,8 @@ export class ClasesService {
             const classDate = new Date(clase.fecha);
             if (
               // clase.fecha == currentDate.toISOString().slice(0, 10)
-              clase.fecha == "2023-10-28"
+              // clase.fecha == "2023-10-28"
+              clase.fecha == fechaDeHoy
             ) {
               // Compare only the date portion of the datetime
               clases.push({
