@@ -92,7 +92,7 @@ export class ClasesService {
             const classDate = new Date(clase.fecha);
             if (
               // clase.fecha == currentDate.toISOString().slice(0, 10)
-              clase.fecha == "2023-10-27"
+              clase.fecha == "2023-10-28"
             ) {
               // Compare only the date portion of the datetime
               clases.push({

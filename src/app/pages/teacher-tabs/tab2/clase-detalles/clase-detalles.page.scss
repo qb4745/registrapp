@@ -49,3 +49,17 @@
     transform: scale(0); /* seeting back to initial size */
   }
 }
+
+.qrcodeImage {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+/* Add custom styles here */
+.demoBorderRadius {
+  border: dashed;
+  border-width: 2px 4px;
+  border-radius: 40px;
+  overflow: hidden;
+}

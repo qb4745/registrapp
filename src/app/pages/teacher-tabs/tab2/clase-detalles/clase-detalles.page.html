@@ -121,7 +121,95 @@
         <ion-label>
           <p class="font-size-smallest">Genere código QR</p>
         </ion-label>
-        <ion-button color="secondary" slot="end"> Generar </ion-button>
+        <ion-button id="open-modal" color="secondary" slot="end">
+          Generar
+        </ion-button>
+        <!-- Modal -->
+        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar color="dark">
+                <ion-title slot="primary">Qr de Asistencia</ion-title>
+                <ion-buttons slot="end">
+                  <ion-button (click)="confirm()" [strong]="true"
+                    >cerrar</ion-button
+                  >
+                </ion-buttons>
+              </ion-toolbar>
+            </ion-header>
+            <hr />
+            <ion-content class="ion-padding" [fullscreen]="true">
+              <ion-list-header class="ion-list-header-small">
+                <ion-label>
+                  <ion-text color="tertiary"
+                    >Escanee Qr con RegistrAPP</ion-text
+                  >
+                </ion-label>
+              </ion-list-header>
+              <ion-card
+                color="--ion-color-dark"
+                class="ion-no-margin ion-card-chart animate__animated animate__fadeIn"
+              >
+                <!-- Skeletons -->
+                <ng-container *ngIf="!content_loaded">
+                  <div>
+                    <ion-card-title>
+                      <ion-skeleton-text
+                        animated
+                        style="width: 60px"
+                      ></ion-skeleton-text>
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                      <ion-skeleton-text
+                        animated
+                        style="width: 80px"
+                      ></ion-skeleton-text>
+                    </ion-card-subtitle>
+                  </div>
+                  <ion-badge color="primary" mode="ios">
+                    <ion-skeleton-text
+                      animated
+                      style="width: 50px"
+                    ></ion-skeleton-text>
+                  </ion-badge>
+
+                  <ion-skeleton-text
+                    animated
+                    style="
+                      width: calc(100% - 40px);
+                      margin: 16px auto 16px auto;
+                      min-height: 140px;
+                    "
+                  >
+                  </ion-skeleton-text>
+                </ng-container>
+
+                <!-- Chart -->
+                <ng-container *ngIf="content_loaded">
+                  <div class="qrcodeImage centered-text">
+                    <qrcode
+                      class="demoBorderRadius"
+                      [qrdata]="qrdata"
+                      [ariaLabel]="'Código QR de asistencia...'"
+                      [colorDark]="'#000000ff'"
+                      [colorLight]="'#ffffffff'"
+                      [elementType]="'canvas'"
+                      [errorCorrectionLevel]="'M'"
+                      [imageSrc]="'../assets/logo.png'"
+                      [imageHeight]="50"
+                      [imageWidth]="50"
+                      [margin]="4"
+                      [scale]="1"
+                      [title]="'Código QR de asistencia'"
+                      [width]="width"
+                    ></qrcode>
+                  </div>
+                </ng-container>
+              </ion-card>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
+        <!-- Modal -->
       </ion-item>
 
       <hr class="hr-medium" />
@@ -151,7 +239,7 @@
             <p class="font-size-smallest">
               {{ alumno.alumnos.nombre | titlecase }} {{
               alumno.alumnos.apellido_paterno | titlecase }} {{
-              alumno.alumnos.apellido_paterno | titlecase }}.
+              alumno.alumnos.apellido_materno | titlecase }}.
             </p>
           </ion-label>
         </ion-item>

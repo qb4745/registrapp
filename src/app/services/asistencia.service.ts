@@ -105,8 +105,23 @@ export class AsistenciaService {
       );
   }
 
+  getAsistenciaByClaseId(claseId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Range': '0-9'
+    });
+
+    const params = {
+      clase_id: `eq.${claseId}`,
+      select: '*,clases(*)'
+    };
+
+    return this.http.get<any>(`${this.apiUrlAsistencia}`, { headers, params });
+  }
 
 
 
 
+//https://cfvuncnwecyhmgmrqerh.supabase.co/rest/v1/asistencias?select=*,clases(*)&clase_id=eq.7
 }
