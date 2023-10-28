@@ -100,7 +100,6 @@ export class AsistenciaService {
     return this.http.get<any>(`${this.apiUrlAsistenciaAlumno}`, { headers, params })
       .pipe(
         map(response => {
-          // If there is at least one result, return true. Otherwise, return false.
           return response.length > 0;
         })
       );

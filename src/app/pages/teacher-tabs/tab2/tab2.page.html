@@ -1,6 +1,6 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark" class="centered-title">
-    <ion-title class="light"> Clases de Hoy </ion-title>
+    <ion-title class="light"> Clases de Hoy 2 </ion-title>
     <ion-buttons slot="primary">
       <ion-button color="secondary" (click)="filter()">
         <ion-icon slot="icon-only" name="filter"></ion-icon>
@@ -73,7 +73,7 @@
         <ion-item
           color="primary"
           button
-          routerLink="clase-detalles"
+          (click)="goToClaseDetails(clase)"
           detail="false"
           *ngFor="let clase of clasesList"
         >

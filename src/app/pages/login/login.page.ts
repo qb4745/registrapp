@@ -205,7 +205,7 @@ export class LoginPage implements OnInit {
   }
 
   goToTeacherTabs() {
-    this.router.navigate(['teacher/tabs/tab1']);
+    this.router.navigate(['teacher', 'tabs', 'tab1']);
   }
 
   goToRegister() {

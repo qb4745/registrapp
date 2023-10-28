@@ -3,104 +3,159 @@
     <ion-buttons slot="start">
       <ion-back-button
         color="secondary"
-        text="Payments"
-        defaultHref="/payments"
+        text="Atrás"
+        (click)="goToClasesTab()"
       ></ion-back-button>
     </ion-buttons>
-    <ion-title> Details </ion-title>
+    <ion-title class="centered-title"> Clase </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="ion-padding">
-    <ion-list-header class="ion-list-header-small">
-      <ion-label>
-        <ion-text color="tertiary">Information</ion-text>
-      </ion-label>
-    </ion-list-header>
+    <!-- Skeletons -->
+    <ng-container *ngIf="!content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label
+          ><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text
+        ></ion-label>
+        <ion-note color="tertiary" class="ion-note-small">
+          <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+        </ion-note>
+      </ion-list-header>
 
-    <ion-list class="list-custom" lines="full">
-      <ion-item color="primary">
-        <ion-label>
-          <p>Amount</p>
-        </ion-label>
-        <ion-badge color="danger" mode="ios" slot="end">- $8.60</ion-badge>
-      </ion-item>
-      <ion-item color="primary">
-        <ion-label>
-          <p>Status</p>
-        </ion-label>
-        <ion-input
-          readonly
-          slot="end"
-          class="font-size-small ion-text-right ion-no-padding-end"
-          value="Completed"
-        ></ion-input>
-      </ion-item>
-      <ion-item color="primary">
-        <ion-label>
-          <p>Date</p>
-        </ion-label>
-        <ion-input
-          readonly
-          slot="end"
-          class="font-size-small ion-text-right ion-no-padding-end"
-          value="01 June, 2022 / 09:21"
-        ></ion-input>
-      </ion-item>
-      <ion-item color="primary">
-        <ion-label>
-          <p>Merchant</p>
-        </ion-label>
-        <ion-input
-          readonly
-          slot="end"
-          class="font-size-small ion-text-right ion-no-padding-end"
-          value="Starbucks New York"
-        ></ion-input>
-      </ion-item>
-      <ion-item color="primary">
-        <ion-label>
-          <p>Transaction-ID</p>
-        </ion-label>
-        <ion-input
-          readonly
-          slot="end"
-          class="font-size-small ion-text-right ion-no-padding-end"
-          value="848-14E-11V"
-        ></ion-input>
-      </ion-item>
-    </ion-list>
+      <ion-list
+        class="list-custom animate__animated animate__fadeIn"
+        lines="full"
+      >
+        <ion-item
+          color="primary"
+          button
+          detail="false"
+          *ngFor="let i of [].constructor(12);"
+        >
+          <ion-avatar slot="start" class="ion-avatar-default-icon">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text
+                animated
+                style="width: 50%"
+              ></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text
+                animated
+                style="width: 75%"
+              ></ion-skeleton-text>
+            </p>
+          </ion-label>
+          <ion-skeleton-text
+            slot="end"
+            animated
+            style="width: 15%"
+          ></ion-skeleton-text>
+        </ion-item>
+      </ion-list>
+    </ng-container>
 
-    <hr class="hr-medium" />
+    <ng-container *ngIf="content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label>
+          <ion-text color="tertiary"></ion-text>
+        </ion-label>
+      </ion-list-header>
 
-    <ion-list-header class="ion-list-header-small">
-      <ion-label>
-        <ion-text color="tertiary">Actions</ion-text>
-      </ion-label>
-    </ion-list-header>
+      <ion-list
+        class="list-custom"
+        lines="full"
+        *ngIf="content_loaded && claseInfoReceived"
+      >
+        <ion-item color="primary">
+          <ion-label>
+            <p>Sección:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{ claseInfoReceived.nombre_seccion }}"
+          ></ion-input>
+        </ion-item>
+        <ion-item color="primary">
+          <ion-label>
+            <p>Fecha:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{ claseInfoReceived.fecha }}"
+          ></ion-input>
+        </ion-item>
+        <ion-item color="primary">
+          <ion-label>
+            <p>Horario:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{ claseInfoReceived.hora_inicio }} a {{ claseInfoReceived.hora_termino }}"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-list-header class="ion-list-header-small">
+        <ion-label>
+          <ion-text color="tertiary">Acciones</ion-text>
+        </ion-label>
+      </ion-list-header>
 
-    <ion-list class="list-custom" lines="full">
       <ion-item color="primary" detail="false">
         <ion-avatar slot="start" class="ion-avatar-default-icon">
-          <ion-icon color="tertiary" name="receipt"></ion-icon>
+          <ion-icon
+            color="tertiary"
+            size="large"
+            name="qr-code-outline"
+            class="heart"
+          ></ion-icon>
         </ion-avatar>
         <ion-label>
-          <h3>Receipt</h3>
-          <p class="font-size-smallest">View digital invoice</p>
+          <p class="font-size-smallest">Genere código QR</p>
         </ion-label>
-        <ion-button color="secondary" slot="end"> View </ion-button>
+        <ion-button color="secondary" slot="end"> Generar </ion-button>
       </ion-item>
 
-      <ion-item color="primary" button>
-        <ion-avatar slot="start" class="ion-avatar-default-icon">
-          <ion-icon color="tertiary" name="chatbox"></ion-icon>
-        </ion-avatar>
+      <hr class="hr-medium" />
+
+      <ion-list-header class="ion-list-header-small">
         <ion-label>
-          <h3>Contact merchant</h3>
-          <p class="font-size-smallest">Get in touch with merchant</p>
+          <ion-text color="tertiary"
+            >Alumnos en la Sección: {{ alumnosPorClase.length }}</ion-text
+          >
         </ion-label>
-      </ion-item>
-    </ion-list>
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom"
+        lines="full"
+        *ngFor="let alumno of alumnosPorClase; let i = index"
+      >
+        <ion-item color="primary" detail="false">
+          <ion-avatar slot="start" class="ion-avatar-default-icon">
+            <ion-icon
+              color="tertiary"
+              size="large"
+              name="person-circle-outline"
+            ></ion-icon>
+          </ion-avatar>
+          <ion-label>
+            <p class="font-size-smallest">
+              {{ alumno.alumnos.nombre | titlecase }} {{
+              alumno.alumnos.apellido_paterno | titlecase }} {{
+              alumno.alumnos.apellido_paterno | titlecase }}.
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
   </div>
 </ion-content>

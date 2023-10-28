@@ -6,6 +6,7 @@ import { ClasesService } from 'src/app/services/clases.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { Clase } from 'src/app/interfaces/clase.interface';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -19,6 +20,7 @@ export class Tab2Page implements OnInit {
   private profesorId: string;
   // clasesList: any;
   clasesList: Clase[];
+  // claseInfo: Clase;
 
   content_loaded: boolean = false;
 
@@ -26,7 +28,8 @@ export class Tab2Page implements OnInit {
     private routerOutlet: IonRouterOutlet,
     private modalController: ModalController,
     private clasesService: ClasesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -73,6 +76,18 @@ export class Tab2Page implements OnInit {
     const locale = 'es-CL';
     const currentDate = new Date();
     return currentDate.toLocaleDateString(locale, options);
+  }
+
+  goToClaseDetails(claseInfo: Clase) {
+    let claseInfoSend: NavigationExtras = {
+      state: {
+        clase: claseInfo
+
+      }
+    }
+    console.log('claseInfo:', claseInfoSend);
+    const id = claseInfo.id;
+    this.router.navigate([`clase-detalles/${id}`], claseInfoSend);
   }
 
 }

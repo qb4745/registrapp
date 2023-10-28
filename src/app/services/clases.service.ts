@@ -8,12 +8,14 @@ import { AuthService } from './auth.service';
 import { Clase } from '../interfaces/clase.interface';
 
 const SECCIONES_URL_SNIPPET = '/rest/v1/secciones';
+const SECCIONES_ALUMNOS_URL_SNIPPET = '/rest/v1/secciones_alumnos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClasesService {
   private apiUrlSecciones = environment.supabaseUrl + SECCIONES_URL_SNIPPET;
+  private apiUrlSeccionesAlumnos = environment.supabaseUrl + SECCIONES_ALUMNOS_URL_SNIPPET;
   private supabase: SupabaseClient;
 
 
@@ -73,7 +75,7 @@ export class ClasesService {
 
     const params = {
       profesor_id: `eq.${profesorId}`,
-      select: '*,clases(*)' // Include clases(*) in the select query to get class information for each section
+      select: '*,clases(*)'
     };
 
     return this.http.get<any[]>(`${this.apiUrlSecciones}`, { headers, params }).pipe(
@@ -110,6 +112,21 @@ export class ClasesService {
         return clases;
       })
     );
+  }
+  // https://cfvuncnwecyhmgmrqerh.supabase.co/rest/v1/secciones_alumnos?select=*,alumnos(*)&seccion_id=eq.1
+
+  getgetAlumnosBySeccion(seccionId: number): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+    });
+
+    const params = {
+      seccion_id: `eq.${seccionId}`,
+      select: '*,alumnos(*)'
+    };
+
+    return this.http.get<any[]>(`${this.apiUrlSeccionesAlumnos}`, { headers, params });
   }
 
 

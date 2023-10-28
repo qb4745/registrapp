@@ -22,17 +22,21 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/teacher-tabs/tabs/tabs.routes').then( m => m.routes)
   },
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
-  {
     path: 'filter',
     loadComponent: () => import('./pages/teacher-tabs/tab2/filter/filter.page').then( m => m.FilterPage)
   },
   {
     path: 'clase-detalles',
     loadComponent: () => import('./pages/teacher-tabs/tab2/clase-detalles/clase-detalles.page').then( m => m.ClaseDetallesPage)
+  },
+  {
+    path: 'clase-detalles/:id',
+    loadComponent: () => import('./pages/teacher-tabs/tab2/clase-detalles/clase-detalles.page').then( m => m.ClaseDetallesPage)
+  },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
   },
 
 ];
