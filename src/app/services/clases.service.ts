@@ -9,6 +9,7 @@ import { Clase } from '../interfaces/clase.interface';
 
 const SECCIONES_URL_SNIPPET = '/rest/v1/secciones';
 const SECCIONES_ALUMNOS_URL_SNIPPET = '/rest/v1/secciones_alumnos';
+const CLASES_URL_SNIPPET = '/rest/v1/clases';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ const SECCIONES_ALUMNOS_URL_SNIPPET = '/rest/v1/secciones_alumnos';
 export class ClasesService {
   private apiUrlSecciones = environment.supabaseUrl + SECCIONES_URL_SNIPPET;
   private apiUrlSeccionesAlumnos = environment.supabaseUrl + SECCIONES_ALUMNOS_URL_SNIPPET;
+  private apiUrlClases = environment.supabaseUrl + CLASES_URL_SNIPPET;
   private supabase: SupabaseClient;
 
 
@@ -70,7 +72,6 @@ export class ClasesService {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
     });
 
     const params = {
@@ -128,6 +129,85 @@ export class ClasesService {
     };
 
     return this.http.get<any[]>(`${this.apiUrlSeccionesAlumnos}`, { headers, params });
+  }
+
+/*   getClasesAndSeccionbyFecha(fechaDeHoy: string): Observable<Clase[]> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Range': '0-9'
+    });
+
+    const params = {
+      fecha: `eq.${fechaDeHoy}`,
+      select: '*,clases(*)'
+    };
+
+    return this.http.get<any[]>(`${this.apiUrlSecciones}`, { headers, params }).pipe(
+      tap(response => console.log('API Response:', response)),
+      map(response => {
+        // Map the response data to create the desired structure
+        const currentDate = new Date();
+
+
+        const clases: Clase[] = [];
+
+        response.forEach(section => {
+          section.clases.forEach(clase => {
+            const classDate = new Date(clase.fecha);
+            if (
+              // clase.fecha == currentDate.toISOString().slice(0, 10)
+              // clase.fecha == "2023-10-28"
+              clase.fecha == fechaDeHoy
+            ) {
+              // Compare only the date portion of the datetime
+              clases.push({
+                id: clase.id,
+                fecha: clase.fecha,
+                hora_inicio: clase.hora_inicio,
+                hora_termino: clase.hora_termino,
+                seccion_id: clase.seccion_id,
+                nombre_seccion: section.nombre_seccion,
+                profesor_id: section.profesor_id,
+                asignatura_id: section.asignatura_id
+              });
+            }
+          });
+        });
+
+        return clases;
+      })
+    );
+  } */
+  getClasesAndSeccionbyFecha(fechaDeHoy: string): Observable<Clase[]> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+    });
+
+    const params = {
+      fecha: `eq.${fechaDeHoy}`,
+      select: '*,seccion_id(*)'
+    };
+
+    return this.http.get<any[]>(this.apiUrlClases, { headers, params }).pipe(
+      tap(response => console.log('API Response:', response)),
+      map(response => {
+        return response.map(clase => {
+          const seccion = clase.seccion_id;
+          return {
+            id: clase.id,
+            fecha: clase.fecha,
+            hora_inicio: clase.hora_inicio,
+            hora_termino: clase.hora_termino,
+            seccion_id: seccion.id, // Accessing seccion_id properties
+            nombre_seccion: seccion.nombre_seccion, // Accessing seccion_id properties
+            profesor_id: seccion.profesor_id, // Accessing seccion_id properties
+            asignatura_id: seccion.asignatura_id // Accessing seccion_id properties
+          };
+        });
+      })
+    );
   }
 
 

@@ -1,6 +1,8 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark">
-    <ion-title color="light" class="centered-title">Asistencia</ion-title>
+    <ion-title color="light" class="centered-title"
+      >Escanear Asistencia</ion-title
+    >
     <ion-buttons slot="primary">
       <ion-button id="open-modal-scanner" color="light">
         <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
@@ -94,35 +96,32 @@
     <ion-list class="list-custom" lines="full">
       <ion-item color="primary">
         <ion-label>
-          <p>Fecha de Clases</p>
+          <p>Fecha de Clases:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
-          asistencia.clases.fecha | date: 'mediumDate'  }}"
+          asistencia.clases.fecha | date: 'dd MMM, yyyy'  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Horario</p>
+          <p>Horario:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
-            asistencia.clases.hora_inicio }} a {{ asistencia.clases.hora_termino  }}"
+            asistencia.clases.hora_inicio.slice(0, 5) }} a {{ asistencia.clases.hora_termino.slice(0, 5)  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Asignatura</p>
+          <p>Asignatura:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.asignaturas.nombre_asignatura }}"
@@ -130,11 +129,10 @@
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Sección</p>
+          <p>Sección:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.nombre_seccion }}"
@@ -142,11 +140,10 @@
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Profesor</p>
+          <p>Profesor:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.profesores.nombre | titlecase }} {{

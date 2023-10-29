@@ -1,6 +1,6 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark" class="centered-title">
-    <ion-title class="light"> Clases de Hoy 2 </ion-title>
+    <ion-title class="light"> Horario de Clases </ion-title>
     <ion-buttons slot="primary">
       <ion-button color="secondary" (click)="filter()">
         <ion-icon slot="icon-only" name="filter"></ion-icon>
@@ -86,23 +86,19 @@
           </ion-avatar>
 
           <ion-label>
-            <h3>{{ clase.nombre_seccion }}</h3>
-            <p>
-              {{ clase.fecha }} - {{ clase.hora_inicio }} a {{
-              clase.hora_termino }}
-            </p>
+            <h2>
+              <strong
+                >{{ clase.hora_inicio.slice(0, 5) }} a {{
+                clase.hora_termino.slice(0, 5) }}</strong
+              >
+            </h2>
+
+            <h2>{{ clase.nombre_seccion }}</h2>
+
+            <p>{{ clase.fecha | date: 'dd MMM, yyyy' }}</p>
           </ion-label>
         </ion-item>
       </ion-list>
     </ng-container>
   </div>
 </ion-content>
-
-<!-- <ion-label>
-  <h3>{{ clase.nombre_seccion }}</h3>
-  <p>
-    {{ clase.clases[0].fecha }} - {{
-    clase.clases[0].hora_inicio }} a {{
-    clase.clases[0].hora_termino }}
-  </p>
-</ion-label> -->

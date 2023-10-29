@@ -34,7 +34,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   public userId: string;
   private asistenciaId: string;
   // qrCode: string = "1";
-  qrCode: string  = "6a227f0f-59a3-4022-97fc-4852115d6e00";
+  qrCode: string  = "329be335-ae72-4eea-b25b-6f85d5aea90d";
   asistencia: any;
   public asistenciaResponse$: Observable<any>;
   // Create a subject to manage the subscription lifecycle

@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   signInWithEmail(email: string) {
-    const redirectTo = isPlatform('capacitor') ? 'registrapp://login' : `${window.location.origin}/student/tabs/tab1`;
+    const redirectTo = isPlatform('capacitor') ? 'registrapp://login' : `${window.location.origin}/login`;
     console.log('set redirect: ', redirectTo);
 
     return this.supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
