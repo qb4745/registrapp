@@ -51,41 +51,6 @@ export class AsistenciaService {
     return this.http.get<any>(`${this.apiUrlAsistencia}`, { headers, params });
   }
 
-  updateAsistioStatusToTrue(asistenciaId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'apikey': environment.supabaseKey,
-      'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Content-Type': 'application/json' // Specify content type for PATCH request
-    });
-
-    const body = {
-      asistio: true
-    };
-
-    const params = {
-      id: `eq.${asistenciaId}`
-    };
-
-    return this.http.patch<any>(`${this.apiUrlAsistencia}`, body, { headers, params });
-  }
-  updateAsistioStatusToFalse(asistenciaId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'apikey': environment.supabaseKey,
-      'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Content-Type': 'application/json' // Specify content type for PATCH request
-    });
-
-    const body = {
-      asistio: false
-    };
-
-    const params = {
-      id: `eq.${asistenciaId}`
-    };
-
-    return this.http.patch<any>(`${this.apiUrlAsistencia}`, body, { headers, params });
-  }
-
   createAsistencia(asistenciaId: string, alumnoId: string): Observable<any> {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
@@ -135,14 +100,28 @@ export class AsistenciaService {
     return this.http.get<any>(`${this.apiUrlAsistenciaAlumno}`, { headers, params })
       .pipe(
         map(response => {
-          // If there is at least one result, return true. Otherwise, return false.
           return response.length > 0;
         })
       );
   }
 
+  getAsistenciaByClaseId(claseId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+      'Range': '0-9'
+    });
+
+    const params = {
+      clase_id: `eq.${claseId}`,
+      select: '*,clases(*)'
+    };
+
+    return this.http.get<any>(`${this.apiUrlAsistencia}`, { headers, params });
+  }
 
 
 
 
+//https://cfvuncnwecyhmgmrqerh.supabase.co/rest/v1/asistencias?select=*,clases(*)&clase_id=eq.7
 }

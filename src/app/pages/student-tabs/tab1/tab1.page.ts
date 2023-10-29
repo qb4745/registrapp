@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { UserModel } from 'src/app/models/UserModel';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,7 +16,7 @@ import { AlumnoService } from 'src/app/services/alumno.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ExploreContainerComponent, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class Tab1Page implements OnInit{
   public userFromPublic: any;

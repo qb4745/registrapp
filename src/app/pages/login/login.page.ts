@@ -28,7 +28,6 @@ export class LoginPage implements OnInit {
     password: ['', Validators.required],
   });
 
-  // private initialized = false;
 
 
 
@@ -49,7 +48,6 @@ export class LoginPage implements OnInit {
       if (user) {
         this.userId = this.authService.getCurrentUserId();
 
-        // Fetch alumno info
         this.alumnoService.getAlumnoInfo(this.userId).subscribe(
           (alumnoData) => {
             if (alumnoData && this.authService.initialized === false)
@@ -58,7 +56,6 @@ export class LoginPage implements OnInit {
           }
         );
 
-        // Fetch profesor info
         this.profesorService.getProfesorInfo(this.userId).subscribe(
           (profesorData) => {
             if (profesorData && this.authService.initialized === false) {
@@ -186,26 +183,22 @@ export class LoginPage implements OnInit {
 
   redirectByRolValue(numberRol: number | undefined) {
     if (numberRol === 1) {
-      // console.log('en redirect:');
       this.goToStudentTabs();
     } else if (numberRol === 2)  {
       this.goToTeacherTabs();
     }
-    // this.initialized = true;
     this.authService.setInizializedToTrue();
 
   }
 
-/*   goToStudentTabs() {
-    this.router.navigate(['/student/tabs/tab1']);
-  } */
+
   goToStudentTabs() {
     if (this.authService.initialized) return;
     this.router.navigate(['student', 'tabs', 'tab1']);
   }
 
   goToTeacherTabs() {
-    this.router.navigate(['teacher/tabs/tab1']);
+    this.router.navigate(['teacher', 'tabs', 'tab1']);
   }
 
   goToRegister() {

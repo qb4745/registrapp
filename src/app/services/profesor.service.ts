@@ -30,20 +30,6 @@ export class ProfesorService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
-/*   getUserObservable2(userId): Observable<any> {
-    const headers = new HttpHeaders({
-      'apikey': environment.supabaseKey,
-      'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
-    });
-
-    const params = {
-      id: `eq.${userId}`,
-      select: '*'
-    };
-
-    return this.http.get<any>(this.apiUrl, { headers, params });
-  } */
 
   getProfesorInfo(userId): Observable<any> {
     const headers = new HttpHeaders({
@@ -59,4 +45,11 @@ export class ProfesorService {
 
     return this.http.get<any>(this.apiUrl, { headers, params });
   }
+
+
+
+
+
+
+
 }

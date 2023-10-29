@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { FormsModule } from '@angular/forms';
 
@@ -9,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
   standalone: true,
-  imports: [IonicModule, ExploreContainerComponent, FormsModule],
+  imports: [IonicModule, FormsModule],
 })
 export class Tab3Page {
   @ViewChild(IonModal) modal: IonModal;

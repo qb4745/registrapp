@@ -30,7 +30,7 @@
             </ion-label>
           </ion-list-header>
 
-          <ion-list lines="full">
+          <ion-list class="list-custom" lines="full">
             <ion-item
               color="primary"
               detail="false"
@@ -83,8 +83,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="asistencia">
-  <div class="ion-padding">
+<ion-content>
+  <div class="ion-padding" *ngIf="asistencia">
     <ion-list-header class="ion-list-header-small">
       <ion-label>
         <ion-text color="tertiary">Control de Asistencia</ion-text>
@@ -176,10 +176,19 @@
       Eliminar asistencia
     </ion-button>
   </div>
-</ion-content>
-<ion-content style="height: 20%">
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="scan()" [disabled]="!isSupported">
+
+  <ion-fab
+    class="heart"
+    color="secondary"
+    slot="fixed"
+    vertical="bottom"
+    horizontal="end"
+  >
+    <ion-fab-button
+      color="secondary"
+      (click)="scan()"
+      [disabled]="!isSupported"
+    >
       <ion-icon name="scan"></ion-icon>
     </ion-fab-button>
   </ion-fab>

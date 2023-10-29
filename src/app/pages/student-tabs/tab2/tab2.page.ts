@@ -34,7 +34,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   public userId: string;
   private asistenciaId: string;
   // qrCode: string = "1";
-  qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
+  qrCode: string  = "6a227f0f-59a3-4022-97fc-4852115d6e00";
   asistencia: any;
   public asistenciaResponse$: Observable<any>;
   // Create a subject to manage the subscription lifecycle
@@ -59,10 +59,6 @@ export class Tab2Page implements OnInit, OnDestroy{
       this.message = `Hello, ${ev.detail.data}!`;
     }
   }
-
-
-
-
 
   constructor(
     private alertController: AlertController,
@@ -157,27 +153,6 @@ export class Tab2Page implements OnInit, OnDestroy{
 
   goToStudentTabs2() {
     this.router.navigate(['student/tabs/tab2']);
-  }
-
-  updateAsistioFieldToTrue(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToTrue(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: True');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
-  }
-  updateAsistioFieldToFalse(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToFalse(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: False');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
   }
 
   async checkAsistencia() {
