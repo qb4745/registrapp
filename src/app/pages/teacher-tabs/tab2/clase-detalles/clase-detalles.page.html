@@ -89,7 +89,7 @@
           <ion-input
             readonly
             class="font-size-small ion-text-right ion-no-padding-end"
-            value="{{ claseInfoReceived.fecha }}"
+            value="{{ claseInfoReceived.fecha | date: 'dd MMM, yyyy' }}"
           ></ion-input>
         </ion-item>
         <ion-item color="primary">
@@ -99,7 +99,8 @@
           <ion-input
             readonly
             class="font-size-small ion-text-right ion-no-padding-end"
-            value="{{ claseInfoReceived.hora_inicio }} a {{ claseInfoReceived.hora_termino }}"
+            value="{{ claseInfoReceived.hora_inicio.slice(0, 5) }} a {{
+              claseInfoReceived.hora_termino.slice(0, 5) }}"
           ></ion-input>
         </ion-item>
       </ion-list>
@@ -247,26 +248,6 @@
           </ion-label>
         </ion-item>
       </ion-list>
-    </ng-container>
-    <ng-container *ngIf="content_loaded">
-      <div class="qrcodeImage centered-text">
-        <qrcode
-          class="demoBorderRadius"
-          [qrdata]="qrdata"
-          [ariaLabel]="'Código QR de asistencia...'"
-          [colorDark]="'#000000ff'"
-          [colorLight]="'#ffffffff'"
-          [elementType]="'canvas'"
-          [errorCorrectionLevel]="'M'"
-          [imageSrc]="'../assets/logo.png'"
-          [imageHeight]="50"
-          [imageWidth]="50"
-          [margin]="4"
-          [scale]="1"
-          [title]="'Código QR de asistencia'"
-          [width]="width"
-        ></qrcode>
-      </div>
     </ng-container>
   </div>
 </ion-content>

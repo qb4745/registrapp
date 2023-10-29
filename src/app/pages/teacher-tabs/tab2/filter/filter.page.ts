@@ -36,8 +36,7 @@ export class FilterPage implements OnInit {
   ngOnInit() {
 
     // Default range values
-    const dual_range = document.querySelector('#dual-range');
-    dual_range['value'] = { lower: 0, upper: 1000 };
+
   }
 
   // Toggle date from
