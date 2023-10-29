@@ -30,6 +30,7 @@ export class ClaseDetallesPage implements OnInit {
 
   asistenciaByClase: any;
 
+  // modal
   @ViewChild(IonModal) modal: IonModal;
 
   message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
@@ -85,6 +86,8 @@ export class ClaseDetallesPage implements OnInit {
       console.log('this.asistenciaByClase :', this.asistenciaByClase);
 
       this.qrdata = this.asistenciaByClase[0].id;
+      console.log('this.qrdata :', this.qrdata);
+
       this.content_loaded = true;
 
 

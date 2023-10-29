@@ -35,6 +35,8 @@ export class Tab2Page implements OnInit, ViewWillEnter {
 
 
 
+
+
   content_loaded: boolean = false;
 
   constructor(

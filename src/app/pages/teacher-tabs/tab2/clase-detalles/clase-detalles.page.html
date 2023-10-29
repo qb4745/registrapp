@@ -108,6 +108,7 @@
           <ion-text color="tertiary">Acciones</ion-text>
         </ion-label>
       </ion-list-header>
+      <!-- <ion-button id="open-modal-qr"> abrir modal </ion-button> -->
 
       <ion-item color="primary" detail="false">
         <ion-avatar slot="start" class="ion-avatar-default-icon">
@@ -121,11 +122,13 @@
         <ion-label>
           <p class="font-size-smallest">Genere código QR</p>
         </ion-label>
-        <ion-button id="open-modal" color="secondary" slot="end">
-          Generar
-        </ion-button>
+
+        <ion-button id="open-modal-qr" color="secondary"> Generar </ion-button>
         <!-- Modal -->
-        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+        <ion-modal
+          trigger="open-modal-qr"
+          (willDismiss)="onWillDismiss($event)"
+        >
           <ng-template>
             <ion-header>
               <ion-toolbar color="dark">
@@ -244,6 +247,26 @@
           </ion-label>
         </ion-item>
       </ion-list>
+    </ng-container>
+    <ng-container *ngIf="content_loaded">
+      <div class="qrcodeImage centered-text">
+        <qrcode
+          class="demoBorderRadius"
+          [qrdata]="qrdata"
+          [ariaLabel]="'Código QR de asistencia...'"
+          [colorDark]="'#000000ff'"
+          [colorLight]="'#ffffffff'"
+          [elementType]="'canvas'"
+          [errorCorrectionLevel]="'M'"
+          [imageSrc]="'../assets/logo.png'"
+          [imageHeight]="50"
+          [imageWidth]="50"
+          [margin]="4"
+          [scale]="1"
+          [title]="'Código QR de asistencia'"
+          [width]="width"
+        ></qrcode>
+      </div>
     </ng-container>
   </div>
 </ion-content>
