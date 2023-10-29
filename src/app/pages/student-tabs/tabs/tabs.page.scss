@@ -1,5 +1,52 @@
-
 ion-label {
-    font-size: 12px;
-    font-weight: 500;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tab-selected ion-icon {
+  color: white;
+  padding-bottom: 9px;
+}
+
+ion-tab-button:hover {
+  ion-icon,
+  ion-label {
+    color: white !important;
+    --ion-color-base: black !important;
   }
+}
+
+ion-badge {
+  --background: white;
+  --color: white;
+  width: 23px;
+  height: 21px;
+  font-size: 0.8rem;
+  margin-top: -8px;
+  padding-top: 5px;
+}
+
+#tab-button-tab1 > ion-icon:after,
+#tab-button-tab2 > ion-icon:after,
+#tab-button-tab3 > ion-icon:after,
+#tab-button-tab4 > ion-icon:after,
+#tab-button-tab5 > ion-icon:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 7px;
+  position: absolute;
+  transition: width 0.4s ease 0s, background-color 0.4s ease;
+  width: 0;
+  border-radius: 5px;
+}
+
+#tab-button-tab1.tab-selected > ion-icon:after,
+#tab-button-tab2.tab-selected > ion-icon:after,
+#tab-button-tab3.tab-selected > ion-icon:after,
+#tab-button-tab4.tab-selected > ion-icon:after,
+#tab-button-tab5.tab-selected > ion-icon:after {
+  width: 24px;
+  background: #190e60;
+}
