@@ -78,6 +78,7 @@ export class ClaseDetallesPage implements OnInit {
       console.log('this.claseInfoReceived :', this.claseInfoReceived);
 
       this.alumnosPorClase = await firstValueFrom(this.clasesService.getgetAlumnosBySeccion(this.claseInfoReceived.seccion_id));
+      this.alumnosPorClase.sort((a, b) => a.alumnos.apellido_paterno.charAt(0).localeCompare(b.alumnos.apellido_paterno.charAt(0)));
       console.log('this.alumnosPorClase :', this.alumnosPorClase);
 
       this.asistenciaByClase = await firstValueFrom(this.asistenciaService.getAsistenciaByClaseId(this.claseInfoReceived.id));

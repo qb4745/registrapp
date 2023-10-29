@@ -24,9 +24,10 @@ export class Tab2Page implements OnInit, ViewWillEnter {
   // claseInfo: Clase;
 
   // currentDate = new Date();
-  // currentDate = new Date('2023-10-27T00:00:00.000Z');
-  date = moment().tz('America/Santiago').format('YYYY-MM-DD');
-  currentDate = this.date;
+  currentDate = new Date('2023-10-30').toISOString().slice(0, 10);
+
+  // date = moment().tz('America/Santiago').format('YYYY-MM-DD');
+  // currentDate = this.date;
 
 
 
