@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { Clase } from 'src/app/interfaces/clase.interface';
 import { NavigationExtras, Router } from '@angular/router';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-tab2',
@@ -23,7 +24,11 @@ export class Tab2Page implements OnInit, ViewWillEnter {
   // claseInfo: Clase;
 
   // currentDate = new Date();
-  currentDate = new Date('2023-10-27T00:00:00.000Z');
+  // currentDate = new Date('2023-10-27T00:00:00.000Z');
+  date = moment().tz('America/Santiago').format('YYYY-MM-DD');
+  currentDate = this.date;
+
+
 
 
 
@@ -35,7 +40,8 @@ export class Tab2Page implements OnInit, ViewWillEnter {
     private modalController: ModalController,
     private clasesService: ClasesService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+
   ) { }
 
   async ngOnInit() {
@@ -43,7 +49,9 @@ export class Tab2Page implements OnInit, ViewWillEnter {
     this.profesorId = this.authService.getCurrentUserId();
 
     try {
-      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
+      console.log('currentDate:', this.currentDate);
+      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate));
+      this.clasesList.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
       this.content_loaded = true;
       console.log('clasesList tab 2 :', this.clasesList);
     } catch (error) {
@@ -52,26 +60,10 @@ export class Tab2Page implements OnInit, ViewWillEnter {
   }
 
   async ionViewWillEnter(){
-    this.profesorId = this.authService.getCurrentUserId();
 
-    try {
-      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
-      this.content_loaded = true;
-      console.log('clasesList tab 2 :', this.clasesList);
-    } catch (error) {
-      console.error('Error Trayendo los datos de las clases:', error);
-    }
   }
-  async ionViewDidEnter(){
-    this.profesorId = this.authService.getCurrentUserId();
 
-    try {
-      this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate.toISOString().slice(0, 10)));
-      this.content_loaded = true;
-      console.log('clasesList tab 2 :', this.clasesList);
-    } catch (error) {
-      console.error('Error Trayendo los datos de las clases:', error);
-    }
+  async ionViewDidEnter(){
 
   }
 
