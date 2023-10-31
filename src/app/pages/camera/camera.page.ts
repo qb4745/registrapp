@@ -6,6 +6,8 @@ import { ActionSheetController } from '@ionic/angular';
 
 import { UserPhoto, PhotoService } from '../../services/photo.service';
 
+import { NgxPhotoEditorModule } from 'ngx-photo-editor';
+
 
 
 @Component({
@@ -13,7 +15,7 @@ import { UserPhoto, PhotoService } from '../../services/photo.service';
   templateUrl: './camera.page.html',
   styleUrls: ['./camera.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, NgxPhotoEditorModule]
 })
 export class CameraPage implements OnInit {
 
