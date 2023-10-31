@@ -41,90 +41,10 @@
     </ion-list-header>
 
     <ion-list lines="full">
-      <ion-item color="primary" button id="open-modal">
-        <ion-icon slot="start" color="medium" name="id-card-outline"></ion-icon>
-        <ion-label>
-          <h3>Credencial Virtual</h3>
-        </ion-label>
-        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
-          <ng-template>
-            <ion-header>
-              <ion-toolbar color="dark">
-                <ion-title slot="primary">Credencial Virtual</ion-title>
-                <ion-buttons slot="end">
-                  <ion-button (click)="confirm()" [strong]="true"
-                    >cerrar</ion-button
-                  >
-                </ion-buttons>
-              </ion-toolbar>
-            </ion-header>
-
-            <ion-content *ngIf="userFromPublic">
-              <ion-card class="profile-card">
-                <ion-card-content>
-                  <ion-avatar class="img2">
-                    <img src="../../../../assets/card-media.png" />
-                  </ion-avatar>
-
-                  <h1>
-                    <ion-text color="tertiary"
-                      ><strong>
-                        {{ userFromPublic.nombre | titlecase }} {{
-                        userFromPublic.apellido_paterno | titlecase }} {{
-                        userFromPublic.apellido_materno | titlecase }}</strong
-                      ></ion-text
-                    >
-                  </h1>
-
-                  <hr />
-
-                  <h2>
-                    <ion-text color="medium"
-                      ><strong>
-                        Email: {{ userFromPublic.email }}</strong
-                      ></ion-text
-                    >
-                  </h2>
-
-                  <h2 *ngIf="userFromPublic">
-                    <ion-text color="medium"
-                      ><strong>
-                        Carrera: {{ userFromPublic.carreras.nombre_carrera }}
-                      </strong></ion-text
-                    >
-                  </h2>
-                  <h2 *ngIf="userFromPublic">
-                    <ion-text color="medium"
-                      ><strong>
-                        R.U.T: {{ userFromPublic.rut }}
-                      </strong></ion-text
-                    >
-                  </h2>
-
-                  <hr />
-                  <ion-button
-                    class="ion-button-small"
-                    color="primary"
-                    (click)="updateProfilePicture()"
-                  >
-                    <!--                   <ion-button
-                    class="ion-button-small"
-                    color="primary"
-                    (click)="goToRCamera()"
-                  > -->
-                    Cambiar fotografía de perfil
-                  </ion-button>
-                </ion-card-content>
-              </ion-card>
-              <ion-content class="profile-card"> </ion-content>
-            </ion-content>
-          </ng-template>
-        </ion-modal>
-      </ion-item>
-      <ion-item color="primary" button>
+      <ion-item color="primary" (click)="goToDetalleAlumno(userFromPublic)">
         <ion-icon slot="start" color="medium" name="reader-outline"></ion-icon>
         <ion-label>
-          <h3>Calificaciones</h3>
+          <h3>Tus datos</h3>
         </ion-label>
       </ion-item>
     </ion-list>

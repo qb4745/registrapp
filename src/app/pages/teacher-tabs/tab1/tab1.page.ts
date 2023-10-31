@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
@@ -89,6 +89,17 @@ export class Tab1Page implements OnInit {
 
   goToTeacherTabs() {
     this.router.navigate(['teacher', 'tabs', 'tab1']);
+  }
+
+  goToDetalleProfesor(userFromPublic: any) {
+    let userInfoSend: NavigationExtras = {
+      state: {
+        user: userFromPublic
+
+      }
+    }
+    console.log('userInfoSend: ', userInfoSend);
+    this.router.navigate(['detalle-profesor'], userInfoSend);
   }
 
 

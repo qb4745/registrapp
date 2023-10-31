@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserModel } from 'src/app/models/UserModel';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ActionSheetController, IonModal, IonicModule, NavController } from '@ionic/angular';
@@ -30,6 +30,8 @@ export class Tab1Page implements OnInit{
   qrCodeString = 'This is a secret qr code message';
   scannedResult: any;
   content_visibility = '';
+
+  content_loaded: boolean = false;
 
 
 
@@ -75,6 +77,8 @@ export class Tab1Page implements OnInit{
       this.alumnoService.getAlumnoInfoAndCarrera(this.userId).subscribe({
         next: (alumnoData) => {
           this.userFromPublic = alumnoData[0];
+          console.log('userFromPublic :', this.userFromPublic);
+          this.content_loaded = true;
         },
         error: (error) => {
           console.error('Error occurred:', error);
@@ -82,6 +86,7 @@ export class Tab1Page implements OnInit{
         complete: () => {
           console.log('Observable completed');
         }
+
       });
 
       this.editProfileForm = this.formBuilder.group({
@@ -107,8 +112,23 @@ export class Tab1Page implements OnInit{
     this.router.navigate(['']);
   }
 
-  goToRCamera() {
+  goToCamera() {
     this.router.navigate(['camera']);
+  }
+
+/*   goToDetalleAlumno() {
+    this.router.navigate(['detalle-alumno']);
+  } */
+
+  goToDetalleAlumno(userFromPublic: any) {
+    let userInfoSend: NavigationExtras = {
+      state: {
+        user: userFromPublic
+
+      }
+    }
+    console.log('userInfoSend: ', userInfoSend);
+    this.router.navigate(['detalle-alumno'], userInfoSend);
   }
 
   signOut() {

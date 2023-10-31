@@ -1,0 +1,170 @@
+<ion-header collapse="fade" [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="secondary"
+        text="Atrás"
+        (click)="goToStudentTabs()"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title class="centered-title"> Datos Alumno </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="profile-card">
+    <ion-card-content>
+      <ion-avatar class="img2">
+        <img src="../../../../assets/card-media.png" />
+      </ion-avatar>
+    </ion-card-content>
+    <ion-button color="primary" (click)="updateProfilePicture()">
+      <!--                   <ion-button
+      class="ion-button-small"
+      color="primary"
+      (click)="goToRCamera()"
+    > -->
+      Cambiar fotografía
+    </ion-button>
+  </ion-card>
+
+  <div class="ion-padding">
+    <!-- Skeletons -->
+    <ng-container *ngIf="!content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label
+          ><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text
+        ></ion-label>
+        <ion-note color="tertiary" class="ion-note-small">
+          <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+        </ion-note>
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom animate__animated animate__fadeIn"
+        lines="full"
+      >
+        <ion-item
+          color="primary"
+          button
+          detail="false"
+          *ngFor="let i of [].constructor(12);"
+        >
+          <ion-avatar slot="start" class="ion-avatar-default-icon">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text
+                animated
+                style="width: 50%"
+              ></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text
+                animated
+                style="width: 75%"
+              ></ion-skeleton-text>
+            </p>
+          </ion-label>
+          <ion-skeleton-text
+            slot="end"
+            animated
+            style="width: 15%"
+          ></ion-skeleton-text>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+
+    <ng-container *ngIf="content_loaded">
+      <ion-list-header class="ion-list-header-small ion-margin-top">
+        <ion-label>
+          <ion-text color="tertiary"> Tu Información</ion-text>
+        </ion-label>
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom"
+        lines="full"
+        *ngIf="content_loaded && userInfoReceived"
+      >
+        <ion-item color="primary">
+          <ion-label>
+            <p>Sección:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{
+              userInfoReceived.nombre | titlecase }} {{
+                userInfoReceived.apellido_paterno | titlecase }} {{
+                  userInfoReceived.apellido_materno | titlecase }}"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item color="primary">
+          <ion-label>
+            <p>R.U.N:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{
+              userInfoReceived.rut }}"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item color="primary">
+          <ion-label>
+            <p>Email:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{
+              userInfoReceived.email }}"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item color="primary">
+          <ion-label>
+            <p>Celular:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="(+56) {{
+              userInfoReceived.telefono }}"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <hr />
+
+      <ion-list-header class="ion-list-header-small">
+        <ion-label>
+          <ion-text color="tertiary"> Tus Carreras </ion-text>
+        </ion-label>
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom"
+        lines="full"
+        *ngIf="content_loaded && userInfoReceived"
+      >
+        <ion-item color="primary">
+          <ion-label>
+            <p>Carrera:</p>
+          </ion-label>
+          <ion-input
+            readonly
+            class="font-size-small ion-text-right ion-no-padding-end"
+            value="{{
+              userInfoReceived.carreras.nombre_carrera }}"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+    <hr class="hr-medium" />
+  </div>
+</ion-content>
