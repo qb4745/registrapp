@@ -20,7 +20,7 @@ export class AppComponent {
 
   setupListener() {
     App.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
-      console.log('app opened with URL: ', data)
+      console.log('app abierta con URL: ', data)
 
       const openUrl = data.url
       const access = openUrl.split('#access_token=').pop().split('&')[0]
@@ -29,7 +29,7 @@ export class AppComponent {
       await this.authService.setSession(access, refresh)
 
       this.zone.run(() => {
-        this.router.navigateByUrl('/groups', { replaceUrl: true })
+        this.router.navigateByUrl('/login', { replaceUrl: true })
       })
     })
   }
