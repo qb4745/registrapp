@@ -98,14 +98,11 @@ export class Tab3Page implements OnInit {
       console.log('currentDate:', this.currentDate);
       // this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.alumnoId, this.currentDate));
       this.clasesList = await firstValueFrom(this.clasesService.getClasesAndSeccionbyFecha(this.currentDate));
-      console.log('this.clasesList :', this.clasesList);
 
       this.clasesListFilteredByAlumnoSecciones = this.clasesList.filter(clase => this.seccionesDeAlumno.includes(clase.seccion_id));
-      console.log('this.clasesListFilteredByAlumnoSecciones :', this.clasesListFilteredByAlumnoSecciones);
 
       this.clasesList.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
       this.content_loaded = true;
-      console.log('clasesList tab 2 :', this.clasesList);
     } catch (error) {
       console.error('Error Trayendo los datos de las clases:', error);
     }

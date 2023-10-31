@@ -37,7 +37,7 @@ export class Tab2Page implements OnInit, OnDestroy{
   qrCode: string  = "329be335-ae72-4eea-b25b-6f85d5aea90d";
   asistencia: any;
   public asistenciaResponse$: Observable<any>;
-  // Create a subject to manage the subscription lifecycle
+
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   @ViewChild(IonModal) modal: IonModal;
@@ -74,23 +74,8 @@ export class Tab2Page implements OnInit, OnDestroy{
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
-/*     BarcodeScanner.removeAllListeners().then(() => {
-      BarcodeScanner.addListener(
-        'googleBarcodeScannerModuleInstallProgress',
-        (event) => {
-          this.ngZone.run(() => {
-            console.log('googleBarcodeScannerModuleInstallProgress', event);
-            const { state, progress } = event;
-            this.formGroup.patchValue({
-              googleBarcodeScannerModuleInstallState: state,
-              googleBarcodeScannerModuleInstallProgress: progress,
-            });
-          });
-        }
-      );
-    }); */
+
     this.userId = this.authService.getCurrentUserId();
-    console.log('studiante ngOnInit :', this.userId);
 
     this.getUserAsistenciaFromObservable(this.qrCode);
 
@@ -116,7 +101,6 @@ export class Tab2Page implements OnInit, OnDestroy{
     }
     this.asistenciaService.getUserAsistenciaNestedJoinsDetails(qrCode).subscribe({
       next: (userData) => {
-        console.log('getUserAsistenciaFromObservable:', userData[0]);
         this.asistencia = userData[0];
         this.asistenciaId = userData[0].id;
       },
@@ -168,7 +152,7 @@ export class Tab2Page implements OnInit, OnDestroy{
     console.log(' const checkAsistencia asistenciaCreated:', asistenciaCreated);
     console.log(' const asistenciaId:', asistenciaId, 'alumnoId:', userId);
 
-    await loading.dismiss(); // Dismiss the loading spinner
+    await loading.dismiss();
 
     if (!asistenciaCreated) {
       const alert = await this.alertController.create({
@@ -185,19 +169,16 @@ export class Tab2Page implements OnInit, OnDestroy{
           {
             text: 'Aceptar',
             handler: async () => {
-              // Perform the creation of asistencia
               this.asistenciaResponse$ = this.asistenciaService.createAsistencia(asistenciaId, userId)
                 .pipe(takeUntil(this.unsubscribe$));
 
               this.asistenciaResponse$.subscribe({
                 next: (response) => {
                   console.log('Asistencia created successfully:', response);
-                  // Show success message
                   this.showSuccessMessage('Asistencia registrada exitosamente');
                 },
                 error: (error) => {
                   console.error('Error creating asistencia:', error);
-                  // Handle the error, show error message, etc.
                 },
                 complete: () => console.log('createAsistencia completed'),
               });
@@ -231,11 +212,9 @@ export class Tab2Page implements OnInit, OnDestroy{
       this.asistenciaResponse$.subscribe({
         next: (response) => {
           console.log('Asistencia Eliminada successfully:', response);
-          // Show success message
         },
         error: (error) => {
           console.error('Error Eliminando asistencia:', error);
-          // Handle the error, show error message, etc.
         },
         complete: () => console.log('Asistencia Eliminada completed'),
       });

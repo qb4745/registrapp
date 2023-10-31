@@ -76,17 +76,13 @@ export class ClaseDetallesPage implements OnInit {
 
     try {
       this.claseInfoReceived = this.router.getCurrentNavigation()?.extras.state?.['clase'];
-      console.log('this.claseInfoReceived :', this.claseInfoReceived);
 
       this.alumnosPorClase = await firstValueFrom(this.clasesService.getgetAlumnosBySeccion(this.claseInfoReceived.seccion_id));
       this.alumnosPorClase.sort((a, b) => a.alumnos.apellido_paterno.charAt(0).localeCompare(b.alumnos.apellido_paterno.charAt(0)));
-      console.log('this.alumnosPorClase :', this.alumnosPorClase);
 
       this.asistenciaByClase = await firstValueFrom(this.asistenciaService.getAsistenciaByClaseId(this.claseInfoReceived.id));
-      console.log('this.asistenciaByClase :', this.asistenciaByClase);
 
       this.qrdata = this.asistenciaByClase[0].id;
-      console.log('this.qrdata :', this.qrdata);
 
       this.content_loaded = true;
 

@@ -72,7 +72,6 @@ export class Tab1Page implements OnInit {
       this.profesorId = this.authService.getCurrentUserId();
       this.userFromPublic = await firstValueFrom(this.profesorService.getProfesorInfo(this.profesorId));
       this.content_loaded = true;
-      console.log('userFromPublic:', this.userFromPublic);
 
 
     } catch (error) {

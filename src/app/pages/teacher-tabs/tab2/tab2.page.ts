@@ -53,11 +53,9 @@ export class Tab2Page implements OnInit, ViewWillEnter {
     this.profesorId = this.authService.getCurrentUserId();
 
     try {
-      console.log('currentDate:', this.currentDate);
       this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate));
       this.clasesList.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
       this.content_loaded = true;
-      console.log('clasesList tab 2 :', this.clasesList);
     } catch (error) {
       console.error('Error Trayendo los datos de las clases:', error);
     }
@@ -111,7 +109,6 @@ export class Tab2Page implements OnInit, ViewWillEnter {
 
       }
     }
-    console.log('claseInfo:', claseInfoSend);
     const id = claseInfo.id;
     this.router.navigate([`clase-detalles/${id}`], claseInfoSend);
   }

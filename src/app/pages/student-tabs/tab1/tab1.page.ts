@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { UserModel } from 'src/app/models/UserModel';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import * as JsBarcode from 'jsbarcode';
 import { OverlayEventDetail } from '@ionic/core/components';
-import { ActionSheetController, AnimationController, IonModal, IonicModule, NavController } from '@ionic/angular';
+import { ActionSheetController, IonModal, IonicModule, NavController } from '@ionic/angular';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CarreraModel } from 'src/app/models/CarreraModel';
 import { ToastService } from 'src/app/services/toast.service';
@@ -75,8 +74,7 @@ export class Tab1Page implements OnInit{
       console.log('studiante ngOnInit :', this.userId);
       this.alumnoService.getAlumnoInfoAndCarrera(this.userId).subscribe({
         next: (alumnoData) => {
-          console.log('User ngonit:', alumnoData[0]);
-          this.userFromPublic = alumnoData[0]; // Assign the received data to your class property
+          this.userFromPublic = alumnoData[0];
         },
         error: (error) => {
           console.error('Error occurred:', error);
@@ -86,7 +84,6 @@ export class Tab1Page implements OnInit{
         }
       });
 
-      // Setup form
       this.editProfileForm = this.formBuilder.group({
        name_first: ['', Validators.required],
        name_last: ['', Validators.required]
