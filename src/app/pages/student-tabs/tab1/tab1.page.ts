@@ -107,11 +107,8 @@ export class Tab1Page implements OnInit{
     this.router.navigate(['']);
   }
 
-  gotoCredencialVirtual() {
-    this.router.navigate(['credencial']);
-  }
-  gotoCredencialVirtual2() {
-    this.router.navigate(['student/tabs/tab1/credencial']);
+  goToRCamera() {
+    this.router.navigate(['camera']);
   }
 
   signOut() {
