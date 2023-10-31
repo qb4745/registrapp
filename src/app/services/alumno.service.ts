@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { SupabaseClient, User, createClient } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
@@ -35,7 +35,6 @@ export class AlumnoService {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
     });
 
     const params = {
@@ -44,6 +43,25 @@ export class AlumnoService {
     };
 
     return this.http.get<any>(this.apiUrl, { headers, params });
+  }
+
+  checkIfAlumnoExist(userId: string): Observable<boolean> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+    });
+
+    const params = {
+      id: `eq.${userId}`,
+      select: '*'
+    };
+
+    return this.http.get<any>(`${this.apiUrl}`, { headers, params })
+      .pipe(
+        map(response => {
+          return response.length > 0;
+        })
+      );
   }
 
   getAlumnoInfoAndCarrera(userId): Observable<any> {

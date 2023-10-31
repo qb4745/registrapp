@@ -30,13 +30,6 @@ export class Tab2Page implements OnInit, ViewWillEnter {
   date = moment().tz('America/Santiago').format('YYYY-MM-DD');
   currentDate = this.date;
 
-
-
-
-
-
-
-
   content_loaded: boolean = false;
 
   constructor(
@@ -56,6 +49,7 @@ export class Tab2Page implements OnInit, ViewWillEnter {
       this.clasesList = await firstValueFrom(this.clasesService.getProfesorClasesListCurrentDay(this.profesorId, this.currentDate));
       this.clasesList.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
       this.content_loaded = true;
+
     } catch (error) {
       console.error('Error Trayendo los datos de las clases:', error);
     }
