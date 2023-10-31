@@ -136,12 +136,11 @@ export class Tab2Page implements OnInit, OnDestroy{
   }
 
   goToStudentTabs2() {
-    this.router.navigate(['student/tabs/tab2']);
+    this.router.navigate(['student', 'tabs', 'tab2']);
   }
 
   async checkAsistencia() {
     this.asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
-    console.log(' checkAsistencia asistenciaCreated:', this.asistenciaCreated);
   }
 
   async crearAsistenciaByButtonClick(asistenciaId: string, userId: string) {
@@ -149,8 +148,6 @@ export class Tab2Page implements OnInit, OnDestroy{
     await loading.present();
 
     const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
-    console.log(' const checkAsistencia asistenciaCreated:', asistenciaCreated);
-    console.log(' const asistenciaId:', asistenciaId, 'alumnoId:', userId);
 
     await loading.dismiss();
 
@@ -202,7 +199,6 @@ export class Tab2Page implements OnInit, OnDestroy{
   async deleteAsistenciaByButtonClick(asistenciaId: string, userId: string) {
 
     const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
-    console.log(' cdeleteAsistenciaByButtonClick asistenciaCreated:', asistenciaCreated);
 
 
     if (asistenciaCreated) {
@@ -211,7 +207,6 @@ export class Tab2Page implements OnInit, OnDestroy{
 
       this.asistenciaResponse$.subscribe({
         next: (response) => {
-          console.log('Asistencia Eliminada successfully:', response);
         },
         error: (error) => {
           console.error('Error Eliminando asistencia:', error);

@@ -20,42 +20,30 @@ export class AuthService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
     this.supabase.auth.onAuthStateChange((event, sess) => {
-      // console.log('SUPABAS AUTH CHANGED: ', event);
-      // console.log('SUPABAS AUTH CHANGED sess: ', sess);
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        // console.log('SET USER');
 
         this.currentUser.next(sess.user);
         this.userId = this.getCurrentUserId();
 
       } else {
-        // console.log('SET USER TO FALSE');
         this.currentUser.next(false);
       }
     });
 
     this.loadUser();
-    // this.initialized = true;
-    console.log('initialized', this.initialized);
   }
 
   async loadUser() {
     if (this.currentUser.value) {
-      // console.log('ALREADY GOT USER');
       return;
-    } else {
-      // console.log('NO USER, GETTING USER');
     }
 
     const user = await this.supabase.auth.getUser();
-    // console.log('🚀 ~ file: auth.service.ts ~ line 33 ~ AuthService ~ loadUser ~ session', user);
 
     if (user.data.user) {
-      // console.log('aaaaaaaaaa');
       this.currentUser.next(user.data.user);
     } else {
-      // console.log('bbbbbbbbbb');
       this.currentUser.next(false);
     }
 
@@ -71,8 +59,6 @@ export class AuthService {
 
   signInWithEmail(email: string) {
     const redirectTo = isPlatform('capacitor') ? 'registrapp://login' : `${window.location.origin}/login`;
-    console.log('set redirect: ', redirectTo);
-
     return this.supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
   }
 

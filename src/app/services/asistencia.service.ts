@@ -55,7 +55,7 @@ export class AsistenciaService {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Content-Type': 'application/json', // Specify content type for PATCH request
+      'Content-Type': 'application/json',
       'Prefer': 'return=minimal',
     });
 
@@ -123,5 +123,4 @@ export class AsistenciaService {
 
 
 
-//https://cfvuncnwecyhmgmrqerh.supabase.co/rest/v1/asistencias?select=*,clases(*)&clase_id=eq.7
 }
