@@ -6,7 +6,8 @@ const config: CapacitorConfig = {
   appName: 'registrapp',
   webDir: 'www',
   server: {
-    androidScheme:'https'
+    // androidScheme:'https',
+    url:"http://192.168.3.5:8100"
   },
   plugins: {
     SplashScreen: {
