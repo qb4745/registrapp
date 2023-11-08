@@ -2,7 +2,26 @@ ion-content {
     --padding-top: 20%;
     --padding-start: 5%;
     --padding-end: 5%;
+    height: 100%;
+    width: 100%;
     --background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
-      url("https://images.unsplash.com/photo-1508964942454-1a56651d54ac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80")
-        no-repeat;
-  }
+      url("https://images.unsplash.com/photo-1544640808-32ca72ac7f37?auto=format&fit=crop&q=80&w=1635&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+        no-repeat center;
+    background-size: cover;
+}
+.titulo-centrado {
+  text-align: center; /* Centra el texto horizontalmente */
+  margin: 0 auto; /* Centra el elemento en el eje horizontal */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+}
+
+.centered-title {
+  text-align: center;
+  width: 110%;
+  align-items: center; /* Centra el contenido verticalmente */
+  margin: 0 auto; /* Centra el elemento en el eje horizontal */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+}
