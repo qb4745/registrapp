@@ -1,6 +1,8 @@
 <ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="dark">
-    <ion-title color="light" class="centered-title">Asistencia</ion-title>
+    <ion-title color="light" class="centered-title"
+      >Escanear Asistencia</ion-title
+    >
     <ion-buttons slot="primary">
       <ion-button id="open-modal-scanner" color="light">
         <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
@@ -30,7 +32,7 @@
             </ion-label>
           </ion-list-header>
 
-          <ion-list lines="full">
+          <ion-list class="list-custom" lines="full">
             <ion-item
               color="primary"
               detail="false"
@@ -83,8 +85,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="asistencia">
-  <div class="ion-padding">
+<ion-content>
+  <div class="ion-padding" *ngIf="asistencia">
     <ion-list-header class="ion-list-header-small">
       <ion-label>
         <ion-text color="tertiary">Control de Asistencia</ion-text>
@@ -94,35 +96,32 @@
     <ion-list class="list-custom" lines="full">
       <ion-item color="primary">
         <ion-label>
-          <p>Fecha de Clases</p>
+          <p>Fecha de Clases:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
-          asistencia.clases.fecha | date: 'mediumDate'  }}"
+          asistencia.clases.fecha | date: 'dd MMM, yyyy'  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Horario</p>
+          <p>Horario:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
-            asistencia.clases.hora_inicio }} a {{ asistencia.clases.hora_termino  }}"
+            asistencia.clases.hora_inicio.slice(0, 5) }} a {{ asistencia.clases.hora_termino.slice(0, 5)  }}"
         ></ion-input>
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Asignatura</p>
+          <p>Asignatura:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.asignaturas.nombre_asignatura }}"
@@ -130,11 +129,10 @@
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Sección</p>
+          <p>Sección:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.nombre_seccion }}"
@@ -142,11 +140,10 @@
       </ion-item>
       <ion-item color="primary">
         <ion-label>
-          <p>Profesor</p>
+          <p>Profesor:</p>
         </ion-label>
         <ion-input
           readonly
-          slot="end"
           class="font-size-small ion-text-right ion-no-padding-end"
           value="{{
             asistencia.clases.secciones.profesores.nombre | titlecase }} {{
@@ -161,7 +158,8 @@
       class="ion-button-small"
       color="secondary"
       expand="block"
-      (click)="updateAsistioFieldToTrue( asistencia.id )"
+      [disabled]="asistenciaCreated"
+      (click)="crearAsistenciaByButtonClick(asistencia.id, userId)"
     >
       Registrar asistencia
     </ion-button>
@@ -170,15 +168,24 @@
       class="ion-button-small"
       color="secondary"
       expand="block"
-      (click)="updateAsistioFieldToFalse( asistencia.id )"
+      (click)="deleteAsistenciaByButtonClick( asistencia.id, userId )"
     >
-      Registrar asistencia | False
+      Eliminar asistencia | para pruebas
     </ion-button>
   </div>
-</ion-content>
-<ion-content style="height: 20%">
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="scan()" [disabled]="!isSupported">
+
+  <ion-fab
+    class="heart"
+    color="secondary"
+    slot="fixed"
+    vertical="bottom"
+    horizontal="end"
+  >
+    <ion-fab-button
+      color="secondary"
+      (click)="scan()"
+      [disabled]="!isSupported"
+    >
       <ion-icon name="scan"></ion-icon>
     </ion-fab-button>
   </ion-fab>

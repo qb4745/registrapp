@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { UserModel } from 'src/app/models/UserModel';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import * as JsBarcode from 'jsbarcode';
 import { OverlayEventDetail } from '@ionic/core/components';
-import { ActionSheetController, AnimationController, IonModal, IonicModule, NavController } from '@ionic/angular';
+import { ActionSheetController, IonModal, IonicModule, NavController } from '@ionic/angular';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CarreraModel } from 'src/app/models/CarreraModel';
 import { ToastService } from 'src/app/services/toast.service';
@@ -17,7 +15,7 @@ import { AlumnoService } from 'src/app/services/alumno.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ExploreContainerComponent, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class Tab1Page implements OnInit{
   public userFromPublic: any;
@@ -32,6 +30,8 @@ export class Tab1Page implements OnInit{
   qrCodeString = 'This is a secret qr code message';
   scannedResult: any;
   content_visibility = '';
+
+  content_loaded: boolean = false;
 
 
 
@@ -76,8 +76,9 @@ export class Tab1Page implements OnInit{
       console.log('studiante ngOnInit :', this.userId);
       this.alumnoService.getAlumnoInfoAndCarrera(this.userId).subscribe({
         next: (alumnoData) => {
-          console.log('User ngonit:', alumnoData[0]);
-          this.userFromPublic = alumnoData[0]; // Assign the received data to your class property
+          this.userFromPublic = alumnoData[0];
+          console.log('userFromPublic :', this.userFromPublic);
+          this.content_loaded = true;
         },
         error: (error) => {
           console.error('Error occurred:', error);
@@ -85,9 +86,9 @@ export class Tab1Page implements OnInit{
         complete: () => {
           console.log('Observable completed');
         }
+
       });
 
-      // Setup form
       this.editProfileForm = this.formBuilder.group({
        name_first: ['', Validators.required],
        name_last: ['', Validators.required]
@@ -111,15 +112,28 @@ export class Tab1Page implements OnInit{
     this.router.navigate(['']);
   }
 
-  gotoCredencialVirtual() {
-    this.router.navigate(['credencial']);
+  goToCamera() {
+    this.router.navigate(['camera']);
   }
-  gotoCredencialVirtual2() {
-    this.router.navigate(['student/tabs/tab1/credencial']);
+
+/*   goToDetalleAlumno() {
+    this.router.navigate(['detalle-alumno']);
+  } */
+
+  goToDetalleAlumno(userFromPublic: any) {
+    let userInfoSend: NavigationExtras = {
+      state: {
+        user: userFromPublic
+
+      }
+    }
+    console.log('userInfoSend: ', userInfoSend);
+    this.router.navigate(['detalle-alumno'], userInfoSend);
   }
 
   signOut() {
     this.authService.signOut();
+    this.authService.setInizializedToFalse();
   }
 
   // Update profile picture

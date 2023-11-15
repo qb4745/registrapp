@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { SupabaseClient, User, createClient } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
@@ -21,7 +21,6 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class AlumnoService {
-  // private apiUrl = 'https://kvtpgtomhheyppcrztte.supabase.co/rest/v1/users';
   private apiUrl = environment.supabaseUrl + USERS_URL_SNIPPET;
   private supabase: SupabaseClient;
 
@@ -30,26 +29,12 @@ export class AlumnoService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
-/*   getUserObservable2(userId): Observable<any> {
-    const headers = new HttpHeaders({
-      'apikey': environment.supabaseKey,
-      'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
-    });
 
-    const params = {
-      id: `eq.${userId}`,
-      select: '*'
-    };
-
-    return this.http.get<any>(this.apiUrl, { headers, params });
-  } */
 
   getAlumnoInfo(userId): Observable<any> {
     const headers = new HttpHeaders({
       'apikey': environment.supabaseKey,
       'Authorization': `Bearer ${environment.supabaseKey}`,
-      'Range': '0-9'
     });
 
     const params = {
@@ -58,6 +43,25 @@ export class AlumnoService {
     };
 
     return this.http.get<any>(this.apiUrl, { headers, params });
+  }
+
+  checkIfAlumnoExist(userId: string): Observable<boolean> {
+    const headers = new HttpHeaders({
+      'apikey': environment.supabaseKey,
+      'Authorization': `Bearer ${environment.supabaseKey}`,
+    });
+
+    const params = {
+      id: `eq.${userId}`,
+      select: '*'
+    };
+
+    return this.http.get<any>(`${this.apiUrl}`, { headers, params })
+      .pipe(
+        map(response => {
+          return response.length > 0;
+        })
+      );
   }
 
   getAlumnoInfoAndCarrera(userId): Observable<any> {
@@ -74,21 +78,6 @@ export class AlumnoService {
 
     return this.http.get<any>(this.apiUrl, { headers, params });
   }
-/*   [
-    {
-        "id": "ad5ea2cd-d6ea-4c0a-8656-1a8e1898af9c",
-        "email": "combustion.1@gmail.com",
-        "nombre": "jaime",
-        "apaterno": "vicencio",
-        "amaterno": "rubilar",
-        "carrera_id": 1,
-        "rol": 1,
-        "carreras": {
-            "nombre_carrera": "Ingeniería en Informática"
-        }
-    }
-] */
-
 
 
 }

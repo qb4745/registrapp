@@ -1,11 +1,22 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>RegistrAPP1 - 1</ion-title>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="auto">
+          <img src="assets/logo.png" alt="Logo" width="24" height="24" />
+        </ion-col>
+        <ion-col>
+          <ion-title color="light" class="centered-title">
+            RegistrAPP 2
+          </ion-title>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-header>
 
 <ion-content scrollY="false">
-  <ion-card>
+  <ion-card class="animate__animated animate__fadeInUp">
     <ion-card-content>
       <form (ngSubmit)="login()" [formGroup]="credentials">
         <ion-item>
@@ -47,17 +58,6 @@
           <ion-button
             type="button"
             expand="block"
-            color="primary"
-            fill="outline"
-            (click)="goToRegister()"
-          >
-            <ion-icon name="person-outline" slot="start"></ion-icon>
-            Registrarse
-          </ion-button>
-
-          <ion-button
-            type="button"
-            expand="block"
             color="secondary"
             (click)="forgotPw()"
           >
@@ -74,15 +74,6 @@
             <ion-icon name="mail-outline" slot="start"></ion-icon>
             Ingresa con Email
           </ion-button>
-          <!--           <ion-button
-            type="button"
-            expand="block"
-            color="warning"
-            routerLink="student"
-          >
-            <ion-icon name="arrow-forward" slot="start"></ion-icon>
-            Ingresar Sin Cuenta
-          </ion-button> -->
         </div>
       </form>
     </ion-card-content>

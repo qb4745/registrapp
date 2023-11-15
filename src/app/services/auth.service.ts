@@ -10,24 +10,23 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  public currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(null);
+  private currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(null);
   private userId: string;
+  initialized = false;
+
 
   constructor(private router: Router) {
+    console.log('initialized', this.initialized);
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
     this.supabase.auth.onAuthStateChange((event, sess) => {
-      // console.log('SUPABAS AUTH CHANGED: ', event);
-      // console.log('SUPABAS AUTH CHANGED sess: ', sess);
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        // console.log('SET USER');
 
         this.currentUser.next(sess.user);
         this.userId = this.getCurrentUserId();
 
       } else {
-        // console.log('SET USER TO FALSE');
         this.currentUser.next(false);
       }
     });
@@ -37,20 +36,14 @@ export class AuthService {
 
   async loadUser() {
     if (this.currentUser.value) {
-      // console.log('ALREADY GOT USER');
       return;
-    } else {
-      // console.log('NO USER, GETTING USER');
     }
 
     const user = await this.supabase.auth.getUser();
-    // console.log('🚀 ~ file: auth.service.ts ~ line 33 ~ AuthService ~ loadUser ~ session', user);
 
     if (user.data.user) {
-      // console.log('aaaaaaaaaa');
       this.currentUser.next(user.data.user);
     } else {
-      // console.log('bbbbbbbbbb');
       this.currentUser.next(false);
     }
 
@@ -65,9 +58,7 @@ export class AuthService {
   }
 
   signInWithEmail(email: string) {
-    const redirectTo = isPlatform('capacitor') ? 'registrapp://login' : `${window.location.origin}/student/tabs/tab1`;
-    console.log('set redirect: ', redirectTo);
-
+    const redirectTo = isPlatform('capacitor') ? 'registrapp://login' : `${window.location.origin}/login`;
     return this.supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
   }
 
@@ -97,10 +88,15 @@ export class AuthService {
     }
   }
 
-
-
-
   async setSession(access_token, refresh_token) {
     return this.supabase.auth.setSession({ access_token, refresh_token });
+  }
+
+  setInizializedToTrue() {
+    this.initialized = true;
+  }
+
+  setInizializedToFalse() {
+    this.initialized = false;
   }
 }

@@ -1,8 +1,7 @@
-import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AlertController, IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,18 +9,20 @@ import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { Observable, Subject, firstValueFrom, lastValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   standalone: true,
-  imports: [IonicModule, ExploreContainerComponent, CommonModule,
+  imports: [IonicModule, CommonModule, ReactiveFormsModule,
     FormsModule]
 })
-export class Tab2Page implements OnInit{
+export class Tab2Page implements OnInit, OnDestroy{
   public isSupported = false;
   public isPermissionGranted = false;
+  public asistenciaCreated = false;
 
   public formGroup = new UntypedFormGroup({
     googleBarcodeScannerModuleInstallState: new UntypedFormControl(0),
@@ -30,10 +31,14 @@ export class Tab2Page implements OnInit{
 
   barcodes: Barcode[] = [];
   public userFromPublic: any;
-  private userId: string;
+  public userId: string;
+  private asistenciaId: string;
   // qrCode: string = "1";
-  qrCode: string  = "a6cb4b51-c853-46c9-aa6c-9e0c19627269";
+  qrCode: string  = "329be335-ae72-4eea-b25b-6f85d5aea90d";
   asistencia: any;
+  public asistenciaResponse$: Observable<any>;
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   @ViewChild(IonModal) modal: IonModal;
 
@@ -55,34 +60,22 @@ export class Tab2Page implements OnInit{
     }
   }
 
-
-
-
-
-  constructor(private alertController: AlertController, private router: Router, private authService: AuthService,
-              private asistenciaService: AsistenciaService, private readonly ngZone: NgZone) {}
+  constructor(
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private navCtrl: NavController,
+    private router: Router,
+    private authService: AuthService,
+    private asistenciaService: AsistenciaService,
+    private readonly ngZone: NgZone,
+    ) {}
 
   ngOnInit() {
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
     });
-/*     BarcodeScanner.removeAllListeners().then(() => {
-      BarcodeScanner.addListener(
-        'googleBarcodeScannerModuleInstallProgress',
-        (event) => {
-          this.ngZone.run(() => {
-            console.log('googleBarcodeScannerModuleInstallProgress', event);
-            const { state, progress } = event;
-            this.formGroup.patchValue({
-              googleBarcodeScannerModuleInstallState: state,
-              googleBarcodeScannerModuleInstallProgress: progress,
-            });
-          });
-        }
-      );
-    }); */
+
     this.userId = this.authService.getCurrentUserId();
-    console.log('studiante ngOnInit :', this.userId);
 
     this.getUserAsistenciaFromObservable(this.qrCode);
 
@@ -103,13 +96,13 @@ export class Tab2Page implements OnInit{
 
   getUserAsistenciaFromObservable(qrCode: string) {
     if (qrCode.length !== 36) {
-      console.log('QR code invalido');
+      console.log('QR code no pertenece a ninguna asistencia.');
       return;
     }
     this.asistenciaService.getUserAsistenciaNestedJoinsDetails(qrCode).subscribe({
       next: (userData) => {
-        console.log('getUserAsistenciaFromObservable:', userData[0]);
-        this.asistencia = userData[0]; // Assign the received data to your class property
+        this.asistencia = userData[0];
+        this.asistenciaId = userData[0].id;
       },
       error: (error) => {
         console.error('Error occurred:', error);
@@ -143,28 +136,100 @@ export class Tab2Page implements OnInit{
   }
 
   goToStudentTabs2() {
-    this.router.navigate(['student/tabs/tab2']);
+    this.router.navigate(['student', 'tabs', 'tab2']);
   }
 
-  updateAsistioFieldToTrue(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToTrue(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: True');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
+  async checkAsistencia() {
+    this.asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(this.asistenciaId, this.userId));
   }
-  updateAsistioFieldToFalse(qrCode: string): void {
-    this.asistenciaService.updateAsistioStatusToFalse(qrCode).subscribe(
-      response => {
-        console.log('Asistencia actualizada: False');
-      },
-      error => {
-        console.error('Error updating record:', error);
-      }
-    );
+
+  async crearAsistenciaByButtonClick(asistenciaId: string, userId: string) {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
+
+    await loading.dismiss();
+
+    if (!asistenciaCreated) {
+      const alert = await this.alertController.create({
+        header: 'Confirmación',
+        message: '¿Estás seguro de crear esta asistencia?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+              console.log('Asistencia creation canceled');
+            }
+          },
+          {
+            text: 'Aceptar',
+            handler: async () => {
+              this.asistenciaResponse$ = this.asistenciaService.createAsistencia(asistenciaId, userId)
+                .pipe(takeUntil(this.unsubscribe$));
+
+              this.asistenciaResponse$.subscribe({
+                next: (response) => {
+                  console.log('Asistencia created successfully:', response);
+                  this.showSuccessMessage('Asistencia registrada exitosamente');
+                },
+                error: (error) => {
+                  console.error('Error creating asistencia:', error);
+                },
+                complete: () => console.log('createAsistencia completed'),
+              });
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Aviso',
+        message: '¡Asistencia previamente registrada!',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+    }
+  }
+
+  async deleteAsistenciaByButtonClick(asistenciaId: string, userId: string) {
+
+    const asistenciaCreated = await firstValueFrom(this.asistenciaService.checkIfAsistenciaIsAlreadyCreated(asistenciaId, userId));
+
+
+    if (asistenciaCreated) {
+      this.asistenciaResponse$ = this.asistenciaService.deleteAsistencia(asistenciaId, userId)
+        .pipe(takeUntil(this.unsubscribe$));
+
+      this.asistenciaResponse$.subscribe({
+        next: (response) => {
+        },
+        error: (error) => {
+          console.error('Error Eliminando asistencia:', error);
+        },
+        complete: () => console.log('Asistencia Eliminada completed'),
+      });
+    }
+  }
+
+  async showSuccessMessage(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Éxito',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 

@@ -38,7 +38,7 @@
 
 .centered-title {
   text-align: center;
-  width: 110%;
+  width: 120%;
 }
 
 .centered-text {
@@ -48,4 +48,84 @@
 
 .smaller-ion-content {
   height: 30%; /* You can adjust the percentage as per your requirement */
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.green {
+  background: #66ff99;
+}
+
+.orange {
+  background: #f17c57fa;
+}
+
+.blue {
+  background: #3652d9;
+}
+
+.rose {
+  background: #ff66cc;
+}
+
+.center {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100vh;
+}
+
+.circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 1px 1px #0000001a;
+}
+
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+  }
+}
+
+.heart {
+  color: red;
+  font-size: 50px;
+  animation: heart-pulse 1.5s infinite ease-out;
+}
+
+@keyframes heart-pulse {
+  0% {
+    transform: scale(0); /* scaling to 0 */
+  }
+  50% {
+    transform: scale(1.2); /* increasing the size */
+  }
+  70% {
+    transform: scale(0.65); /* decreasing the size */
+  }
+  100% {
+    transform: scale(0); /* seeting back to initial size */
+  }
+}
+
+.master {
+  color: black;
+  float: right;
+}
+
+@media (max-width: 900px) {
+  .master {
+    display: none;
+  }
 }

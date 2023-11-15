@@ -8,6 +8,7 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { HttpClientModule } from '@angular/common/http';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { ProfesorService } from 'src/app/services/profesor.service';
+import { firstValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,8 @@ export class LoginPage implements OnInit {
   private supabase: SupabaseClient;
   private userFromPublicSchema: any;
   private userId: string;
+  private alumnoExiste: Boolean;
+  private currentUser: boolean | User | null = null;
   private rol: number = 2;
 
   credentials = this.fb.group({
@@ -28,7 +31,6 @@ export class LoginPage implements OnInit {
     password: ['', Validators.required],
   });
 
-  private initialized = false;
 
 
 
@@ -44,35 +46,20 @@ export class LoginPage implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.authService.getCurrentUser().subscribe((user) => {
-      if (user) {
+  async ngOnInit(): Promise<void> {
+    this.authService.getCurrentUser().subscribe(async (user) => {
+      if (user && this.authService.initialized === false) {
         this.userId = this.authService.getCurrentUserId();
+        console.log('userId ngoninit: ', this.userId);
+        this.alumnoExiste = await firstValueFrom(this.alumnoService.checkIfAlumnoExist(this.userId));
 
-        // Fetch alumno info
-        this.alumnoService.getAlumnoInfo(this.userId).subscribe(
-          (alumnoData) => {
-            if (alumnoData && this.initialized === false)
-              this.redirectByRolValue(alumnoData[0].rol);
-
-          }
-        );
-
-        // Fetch profesor info
-        this.profesorService.getProfesorInfo(this.userId).subscribe(
-          (profesorData) => {
-            if (profesorData && this.initialized === false) {
-              this.redirectByRolValue(profesorData[0].rol);
-            }
-          }
-        );
+        this.redirectByValue(this.alumnoExiste ? true : false); // si alumno existe lleva a seccion estudiantes, sino a profesores
       }
     });
 
-
     this.credentials.get('email').setValue('combustion.1@gmail.com');
     this.credentials.get('password').setValue('123456');
-}
+  }
 
   async ionViewWillEnter() {
 
@@ -98,6 +85,8 @@ export class LoginPage implements OnInit {
         this.showAlert('Inicio de sesión fallido', data.error.message);
       }
     });
+
+
 
 
   }
@@ -183,28 +172,35 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
+  redirectByValue(alumnoExiste: Boolean) {
+    if (alumnoExiste) {
+      this.goToStudentTabs();
+
+    } else {
+      this.goToTeacherTabs();
+    }
+    this.authService.setInizializedToTrue();
+
+  }
 
   redirectByRolValue(numberRol: number | undefined) {
     if (numberRol === 1) {
-      // console.log('en redirect:');
       this.goToStudentTabs();
     } else if (numberRol === 2)  {
       this.goToTeacherTabs();
     }
-    this.initialized = true;
+    this.authService.setInizializedToTrue();
 
   }
 
-/*   goToStudentTabs() {
-    this.router.navigate(['/student/tabs/tab1']);
-  } */
+
   goToStudentTabs() {
-    if (this.initialized) return;
+    if (this.authService.initialized) return;
     this.router.navigate(['student', 'tabs', 'tab1']);
   }
 
   goToTeacherTabs() {
-    this.router.navigate(['teacher/tabs/tab1']);
+    this.router.navigate(['teacher', 'tabs', 'tab1']);
   }
 
   goToRegister() {

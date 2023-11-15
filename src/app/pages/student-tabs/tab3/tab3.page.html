@@ -1,3 +1,103 @@
-<ion-content color="light">
-  <h1 color="light">mostrar horario</h1>
+<ion-header collapse="fade" [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title class="light centered-title"> Horario de Hoy </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="secondary" (click)="filter()">
+        <ion-icon slot="icon-only" color="light" name="filter"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+    <!-- Skeletons -->
+    <ng-container *ngIf="!content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label
+          ><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text
+        ></ion-label>
+        <ion-note color="tertiary" class="ion-note-small">
+          <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+        </ion-note>
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom animate__animated animate__fadeIn"
+        lines="full"
+      >
+        <ion-item
+          color="primary"
+          button
+          detail="false"
+          *ngFor="let i of [].constructor(6);"
+        >
+          <ion-avatar slot="start" class="ion-avatar-default-icon">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text
+                animated
+                style="width: 50%"
+              ></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text
+                animated
+                style="width: 75%"
+              ></ion-skeleton-text>
+            </p>
+          </ion-label>
+          <ion-skeleton-text
+            slot="end"
+            animated
+            style="width: 15%"
+          ></ion-skeleton-text>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+
+    <ng-container *ngIf="content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label color="tertiary"
+          >{{ getCurrentDate() | titlecase }}</ion-label
+        >
+      </ion-list-header>
+
+      <ion-list
+        class="list-custom animate__animated animate__fadeIn"
+        lines="full"
+        *ngIf="content_loaded && clasesListFilteredByAlumnoSecciones"
+      >
+        <ion-item
+          color="primary"
+          button
+          detail="false"
+          *ngFor="let clase of clasesListFilteredByAlumnoSecciones"
+        >
+          <ion-avatar slot="start" class="ion-avatar-default-icon heart">
+            <ion-icon
+              color="tertiary"
+              size="large"
+              name="book-outline"
+            ></ion-icon>
+          </ion-avatar>
+
+          <ion-label>
+            <h2>
+              <strong
+                >{{ clase.hora_inicio.slice(0, 5) }} a {{
+                clase.hora_termino.slice(0, 5) }}</strong
+              >
+            </h2>
+
+            <h2>{{ clase.nombre_seccion }}</h2>
+
+            <p>{{ clase.fecha | date: 'dd MMM, yyyy' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+  </div>
 </ion-content>

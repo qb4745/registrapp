@@ -18,10 +18,8 @@ export class PasswordRecoveryPage  {
 
   currentUrl = window.location.href;
 
-  // Parse the URL to get its parameters
   urlParams = new URLSearchParams(new URL(this.currentUrl).search);
 
-  // Get the token parameter
   token = this.urlParams.get("token");
 
 
