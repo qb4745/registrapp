@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { Capacitor } from '@capacitor/core';
 
 const config: CapacitorConfig = {
-  appId: 'registrapp',
+  appId: 'com.duoc.registrapp',
   appName: 'registrapp',
   webDir: 'www',
   server: {
