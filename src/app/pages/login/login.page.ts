@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
       }
     });
 
-    this.credentials.get('email').setValue('combustion.1@gmail.com');
+    this.credentials.get('email').setValue('jor.gomezv@profesor.duoc.cl');
     this.credentials.get('password').setValue('123456');
   }
 
